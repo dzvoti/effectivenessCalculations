@@ -156,3 +156,26 @@ calculateMNsContent <- function(df, consumptionCol, MNs) {
     }
     return(df)
 }
+
+
+#' Calculate Consumption Per Adult Female Equivalent (AFE)
+#'
+#' This function calculates the consumption per AFE for each food item in a dataframe.
+#'
+#' @param df A dataframe containing food consumption data and AFE data.
+#' @param consumptionCol A string specifying the column name for the food consumption data.
+#' @param afeCol A string specifying the column name for the AFE data.
+#'
+#' @return A dataframe with the calculated consumption per AFE for each food item.
+#'
+#' @examples
+#' \dontrun{
+#' df <- data.frame(food = c("apple", "banana", "carrot"), consumption = c(100, 200, 150), afe = c(2, 3, 4))
+#' df <- calculateConsPerAfe(df, "consumption", "afe")
+#' }
+#'
+#' @export
+calculateConsPerAfe <- function(df, consumptionCol, afeCol) {
+    df[[paste0(consumptionCol, "PerAfe")]] <- df[[consumptionCol]] / df[[afeCol]]
+    return(df)
+}
