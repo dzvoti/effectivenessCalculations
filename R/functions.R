@@ -48,3 +48,40 @@ load_all_rda_files <- function(dir) {
     # Load all .rda files
     lapply(rda_files, load, .GlobalEnv)
 }
+
+#' Load all .rda files in a directory
+#'
+#' This function loads all .rda files in the specified directory into the global environment.
+#'
+#' @param dir A character string specifying the directory to load .rda files from.
+#'
+#' @return Invisible NULL. This function is called for its side effect of loading .rda files into the global environment.
+#'
+#' @examples
+#' \dontrun{
+#' load_all_rda_files("data/sd123")
+#' }
+#'
+#' @export
+loadMapsRdaTables <- function(dir) {
+    # Get all .rda files in the dir
+    rda_files <- list.files(dir, pattern = "\\.rda$", full.names = TRUE)
+
+    # Initialize an empty list to store the data
+    data <- list()
+
+    # Load all .rda files into the list
+    for (file in rda_files) {
+        # Get the name of the file without the extension
+        name <- tools::file_path_sans_ext(basename(file))
+
+        # Load the file into a temporary environment
+        e <- new.env()
+        load(file, envir = e)
+
+        # Add the loaded data to the list
+        data[[name]] <- e[[ls(e)[1]]] # Just store the first object from the environment
+    }
+
+    return(invisible(data)) # Return data but make the return invisible
+}
