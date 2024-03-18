@@ -130,3 +130,29 @@ enforceNumeric <- function(df, cols) {
     df <- df |> dplyr::mutate_at(cols, as.numeric)
     return(df)
 }
+
+
+
+#' Calculate Micronutrient Content
+#'
+#' This function calculates the micronutrient content for each food item in a dataframe.
+#'
+#' @param df A dataframe containing food consumption data and micronutrient content.
+#' @param consumptionCol A string specifying the column name for the food consumption data.
+#' @param MNs A vector of column names for the micronutrients.
+#'
+#' @return A dataframe with the calculated micronutrient content for each food item.
+#'
+#' @examples
+#' \dontrun{
+#' df <- data.frame(food = c("apple", "banana", "carrot"), consumption = c(100, 200, 150), vitaminA = c(0.5, 0.6, 0.7))
+#' df <- calculateMNsContent(df, "consumption", c("vitaminA"))
+#' }
+#'
+#' @export
+calculateMNsContent <- function(df, consumptionCol, MNs) {
+    for (i in MNs) {
+        df[i] <- ifelse(is.na(df[[i]]) | df[[i]] == 0, NA, df[[consumptionCol]] * df[[i]]) # Is this the correct MNs conversion?
+    }
+    return(df)
+}
