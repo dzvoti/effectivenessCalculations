@@ -26,3 +26,25 @@ loadCsvFiles <- function(folder_path) {
         assign(file_name, data, envir = .GlobalEnv)
     }
 }
+
+#' Load all .rda files in a directory
+#'
+#' This function loads all .rda files in the specified directory into the global environment.
+#'
+#' @param dir A character string specifying the directory to load .rda files from.
+#'
+#' @return Invisible NULL. This function is called for its side effect of loading .rda files into the global environment.
+#'
+#' @examples
+#' \dontrun{
+#' load_all_rda_files("data/sd123")
+#' }
+#'
+#' @export
+load_all_rda_files <- function(dir) {
+    # Get all .rda files in the dir
+    rda_files <- list.files(dir, pattern = "\\.rda$", full.names = TRUE)
+
+    # Load all .rda files
+    lapply(rda_files, load, .GlobalEnv)
+}
