@@ -513,3 +513,37 @@ createMasterNct <- function(nctList, fctListIdCol = "fctListId", foodGenusIdCol 
     }
     return(masterNct)
 }
+
+
+#' Create Thresholds Table
+#'
+#' This function creates a thresholds table from the `intakeThresholds` dataframe. 
+#' It selects the `nutrient` and a specified column, removes rows where the specified column is NA, 
+#' filters for nutrients in the `MNList`, reshapes the data from long to wide format, 
+#' converts all columns to numeric, and adds a suffix to the column names.
+#'
+#' @param intakeThresholds A dataframe containing intake thresholds for various nutrients.
+#' @param col A string specifying the column to be used in the pivot_wider operation.
+#'
+#' @return A dataframe with each row corresponding to a nutrient and each column corresponding to a threshold.
+#'
+#' @examples
+#' # Assuming intakeThresholds is a dataframe and "ear" is a column in it
+#' earThresholds <- createThresholdsTable(intakeThresholds, "ear")
+#'
+#' @export
+createThresholdsTable <- function(intakeThresholds, col) {
+    thresholds <- intakeThresholds |>
+        dplyr::select(nutrient, all_of(col)) |>
+        # Remove rows where col is NA
+        dplyr::filter(!is.na((col))) |>
+        # Leave thresholds for the nutrients in the MNList
+        dplyr::filter(nutrient %in% MNList) |>
+        tidyr::pivot_wider(names_from = nutrient, values_from = dplyr::all_of(col)) |>
+        # Convert all cols to numeric
+        dplyr::mutate_all(as.numeric) |>
+        # Add a suffix to the col names
+        dplyr::rename_with(~ paste0(., "Supply", toupper(col), "Threshold"), everything())
+
+    return(thresholds)
+}
