@@ -83,7 +83,7 @@ loadMapsRdaTables <- function(dir) {
         data[[name]] <- e[[ls(e)[1]]] # Just store the first object from the environment
     }
 
-    return(invisible(data)) # Return data but make the return invisible
+    return(data) # Return data but make the return invisible
 }
 
 #' Check if Required Data is Loaded
