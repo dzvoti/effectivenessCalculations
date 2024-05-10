@@ -348,7 +348,7 @@ calculateBaselineInadequacy <- function(householdConsumptionDf =householdConsump
         # Not necessary by its a personal preference
         tibble::as_tibble() |>
         # Join the household details to the consumption data (Joining columns with the same name)
-        dplyr::left_join(householdDetails) |>
+        dplyr::left_join(householdDetailsDf) |>
         # Join the master NCT to the consumption data
         dplyr::left_join(masterNCT) |>
         # Convert all columns needed for calculations to numeric
@@ -368,7 +368,7 @@ calculateBaselineInadequacy <- function(householdConsumptionDf =householdConsump
         # NOTE: Trial of Andy's suggestion
         dplyr::summarize(dplyr::across(all_of(MNList), ~ sum(.x / 100 * amountConsumedInG, na.rm = TRUE), .names = "{.col}Supply")) |> # TODO: Divide by the afe factor here
         # The summaries remove the household details so we need to join them back to the data
-        dplyr::left_join(householdDetails) |>
+        dplyr::left_join(householdDetailsDf) |>
         # Bind thresholds to the data. The thresholds data has one row so it should be recycled to the number of rows in the data
         dplyr::bind_cols(earThreshholds)
 
@@ -386,7 +386,7 @@ calculateBaselineInadequacy <- function(householdConsumptionDf =householdConsump
 
         # Only create the adequacy column if enrichedHouseholdConsumption[[threshold_col]] is not NA.
         if (!is.na(getMnThresholds(intakeThresholds, nutrient, "ear"))) {
-            enrichedHouseholdConsumption[[adequacy_col]] <- ifelse(enrichedHouseholdConsumption[[supply_col]] >= getMnThresholds(intakeThresholds, nutrient, "ear"), 1, 0)
+            enrichedHouseholdConsumption[[adequacy_col]] <- ifelse(enrichedHouseholdConsumption[[supply_col]] >= getMnThresholds(intakeThresholdsDf, nutrient, "ear"), 1, 0)
         }
     }
 
