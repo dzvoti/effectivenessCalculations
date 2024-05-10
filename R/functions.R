@@ -344,7 +344,7 @@ calculateBaselineInadequacy <- function(householdConsumptionDf =householdConsump
     # Process the consumption data
 
     # Load the consumption data
-    enrichedHouseholdConsumption <- householdConsumption |>
+    enrichedHouseholdConsumption <- householdConsumptionDf |>
         # Not necessary by its a personal preference
         tibble::as_tibble() |>
         # Join the household details to the consumption data (Joining columns with the same name)
