@@ -248,40 +248,7 @@ previewData <- function(df) {
 #'
 #' @examples
 #' calculateBaselineInadequacy(MNList = c("A", "Ca"))
-calculateBaselineInadequacy <- function(MNList = c("A"), aggregationGroup = c("admin0Name", "admin1Name"), dataDir = here::here("data/sd123")) {
-    # Check if MNList is a character vector
-    if (!is.character(MNList)) {
-        stop("MNList must be a character vector")
-    }
-
-    # check if aggregationGroup is a character vector
-    if (!is.character(aggregationGroup)) {
-        stop("aggregationGroup must be a character vector")
-    }
-
-    # Check if MNLIst and aggregationGroup are not empty
-    if (length(aggregationGroup) == 0) {
-        stop("aggregationGroup cannot be empty")
-    }
-
-    # Check if dataDir exists
-    if (!dir.exists(dataDir)) {
-        stop("The specified dataDir does not exist")
-    }
-
-    # Load the data
-    data <- loadMapsRdaTables(dataDir)
-
-    # Check if all the required data is loaded in the data list
-    if (!all(c("householdConsumption", "householdDetails", "nctList", "intakeThresholds") %in% names(data))) {
-        # Explain which data is missing
-        missingData <- c("householdConsumption", "householdDetails", "nctList", "intakeThresholds")[!(c("householdConsumption", "householdDetails", "nctList", "intakeThresholds") %in% names(data))]
-        stop(paste("The following data is missing:", paste(missingData, collapse = ", ")))
-    }
-
-    if (length(MNList) == 0) {
-        # Default to the list of all nutrients
-        MNList <- c(
+calculateBaselineInadequacy <- function(householdConsumptionDf =householdConsumption,householdDetailsDf = householdDetails,nctListDf= nctList, intakeThresholdsDf = intakeThresholds, aggregationGroup = c("admin0Name", "admin1Name"), MNList = c(
             "Ca",
             "Carbohydrates",
             "Cu",
@@ -315,18 +282,46 @@ calculateBaselineInadequacy <- function(MNList = c("A"), aggregationGroup = c("a
             "B5",
             "B7",
             "Mn"
-        )
-        # Tell the user that the default list is being used
-        message("No MNList provided. Using the default list of all nutrients")
+        )) {
+    # Check if MNList is a character vector
+    if (!is.character(MNList)) {
+        stop("MNList must be a character vector e.g. c('A', 'Ca')")
+    }
+
+    # check if aggregationGroup is a character vector
+    if (!is.character(aggregationGroup)) {
+        stop("aggregationGroup must be a character vector e.g. c('admin0Name', 'admin1Name')")
+    }
+
+    # Check if MNLIst and aggregationGroup are not empty
+    if (length(aggregationGroup) == 0) {
+        stop("aggregationGroup cannot be empty")
+    }
+
+    # Check if Df expected in the parameters are dataframes
+    if (!is.data.frame(householdConsumptionDf)) {
+        stop("householdConsumptionDf must be a dataframe")
+    }
+
+    if (!is.data.frame(householdDetailsDf)) {
+        stop("householdDetailsDf must be a dataframe")
+    }
+
+    if (!is.data.frame(nctListDf)) {
+        stop("nctListDf must be a dataframe")
+    }
+
+    if (!is.data.frame(intakeThresholdsDf)) {
+        stop("intakeThresholdsDf must be a dataframe")
     }
 
 
+    if (length(MNList) == 0) {
+        # Tell the user that the default list provided in the parameters is being used
+        message("No MNList provided. Using the default list of all nutrients")
+    }
 
-    # Extract the data from the list
-    householdConsumption <- data$householdConsumption
-    householdDetails <- data$householdDetails
-    nctList <- data$nctList
-    intakeThresholds <- data$intakeThresholds
+    
 
     # Use the createMasterNct function to create a master NCT
     masterNCT <- createMasterNct(nctList)
