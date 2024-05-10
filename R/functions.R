@@ -329,7 +329,7 @@ calculateBaselineInadequacy <- function(householdConsumptionDf =householdConsump
     ## Create a wider format for the intakeThresholds
 
     # Create a wider format for the intakeThresholds
-    earThreshholds <- intakeThresholds |>
+    earThreshholds <- intakeThresholdsDf |>
         dplyr::select(nutrient, ear) |>
         # Remove rows where ear is NA
         dplyr::filter(!is.na(ear)) |>
