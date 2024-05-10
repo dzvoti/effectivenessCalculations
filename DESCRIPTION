@@ -1,10 +1,10 @@
 Package: effectivenessCalculations
-Title: What the Package Does (One Line, Title Case)
-Version: 0.0.0.9000
+Title: MAPS Tool Effectiveness Calculations
+Version: 0.0.1.01
 Authors@R: 
     person("Liberty", "Mlambo", , "liberty.mlambo@nottingham.ac.uk", role = c("aut", "cre"),
            comment = c(ORCID = "0000-0003-3740-1345"))
-Description: What the package does (one paragraph).
+Description: Performs effectiveness calculations for MAPS tool
 License: MIT + file LICENSE
 Encoding: UTF-8
 Roxygen: list(markdown = TRUE)
