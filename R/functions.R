@@ -589,16 +589,22 @@ calculateBaselineInadequacyCND <- function(
 #'
 #' This function calculates the household reach for each food vehicle. It filters the fortifiable food items to get the food vehicle, processes the consumption data, and then calculates the household reach.
 #'
-#' @param householdConsumptionDf A dataframe containing household consumption data. Default is `householdConsumption`.
-#' @param householdDetailsDf A dataframe containing household details. Default is `householdDetails`.
-#' @param fortifiableFoodItemsDf A dataframe containing fortifiable food items. Default is `fortifiable_food_items`.
+#' @param householdConsumptionDf A dataframe containing household consumption data. Must contain columns: "foodGenusId", "householdId".
+#' @param householdDetailsDf A dataframe containing household details. Must contain column: "householdId".
+#' @param fortifiableFoodItemsDf A dataframe containing fortifiable food items. Must contain columns: "food_genus_id", "food_vehicle_name".
 #' @param foodVehicleName A string specifying the food vehicle name. Default is "wheat flour".
 #' @param aggregationGroup A character vector specifying the columns to group by. Default is `c("admin0Name", "admin1Name")`.
 #'
 #' @return A dataframe with the household reach for the specified food vehicle.
 #'
 #' @examples
-#' calculateFoodVehicleHouseholdReach(householdConsumption, householdDetails, fortifiable_food_items, "wheat flour", c("admin0Name", "admin1Name"))
+#' calculateFoodVehicleHouseholdReach(
+#'     householdConsumptionDf = householdConsumption,
+#'     householdDetailsDf = householdDetails,
+#'     fortifiableFoodItemsDf = fortifiable_food_items,
+#'     foodVehicleName = "wheat flour",
+#'     aggregationGroup = c("admin0Name", "admin1Name")
+#' )
 #'
 #' @export
 calculateFoodVehicleHouseholdReach <- function(householdConsumptionDf = householdConsumption, householdDetailsDf = householdDetails, fortifiableFoodItemsDf = fortifiable_food_items, foodVehicleName = "wheat flour", aggregationGroup = c("admin0Name", "admin1Name")) {
@@ -615,19 +621,23 @@ calculateFoodVehicleHouseholdReach <- function(householdConsumptionDf = househol
         stop("fortifiableFoodItemsDf must be a dataframe")
     }
 
-    # # Check if the required columns exist in the dataframes
-    # requiredColumns <- c("foodGenusId", "householdId", "food_vehicle_name")
-    # if (!all(requiredColumns %in% colnames(householdConsumptionDf))) {
-    #     stop("householdConsumptionDf must contain the following columns: ", paste(requiredColumns, collapse = ", "))
-    # }
+    # Define required columns
+    requiredConsumptionCols <- c("foodGenusId", "householdId")
+    requiredDetailsCols <- c("householdId")
+    requiredFortifiableCols <- c("food_genus_id", "food_vehicle_name")
 
-    # if (!all(requiredColumns %in% colnames(householdDetailsDf))) {
-    #     stop("householdDetailsDf must contain the following columns: ", paste(requiredColumns, collapse = ", "))
-    # }
+    # Check if required columns exist in the dataframes
+    if (!all(requiredConsumptionCols %in% colnames(householdConsumptionDf))) {
+        stop(paste("householdConsumptionDf must contain the following columns:", paste(requiredConsumptionCols, collapse = ", ")))
+    }
 
-    # if (!all(requiredColumns %in% colnames(fortifiableFoodItemsDf))) {
-    #     stop("fortifiableFoodItemsDf must contain the following columns: ", paste(requiredColumns, collapse = ", "))
-    # }
+    if (!all(requiredDetailsCols %in% colnames(householdDetailsDf))) {
+        stop(paste("householdDetailsDf must contain the following column:", paste(requiredDetailsCols, collapse = ", ")))
+    }
+
+    if (!all(requiredFortifiableCols %in% colnames(fortifiableFoodItemsDf))) {
+        stop(paste("fortifiableFoodItemsDf must contain the following columns:", paste(requiredFortifiableCols, collapse = ", ")))
+    }
 
     # Filter the fortifiable food items to get the food vehicle
     fortifiableFoodVehicle <- fortifiableFoodItemsDf |>
@@ -635,17 +645,11 @@ calculateFoodVehicleHouseholdReach <- function(householdConsumptionDf = househol
 
     # Process the consumption data
     foodVehicleHouseholdReach <- householdConsumptionDf |>
-        # Not necessary by its a personal preference
         tibble::as_tibble() |>
         dplyr::left_join(fortifiableFoodVehicle, by = c("foodGenusId" = "food_genus_id")) |>
-        # Filter our rows where the food_vehicle_name is not subject to fortification leaving only foods that are subject to fortification
-        # dplyr::filter(food_vehicle_name == foodVehicleName) |>
-        # Join the household details to the consumption data (Joining columns with the same name)
-        dplyr::left_join(householdDetailsDf) |>
-        # Distinct household
+        dplyr::left_join(householdDetailsDf, by = "householdId") |>
         dplyr::arrange(desc(food_vehicle_name)) |>
         dplyr::distinct(householdId, .keep_all = TRUE) |>
-        # Convert all columns needed for calculations to numeric
         dplyr::group_by(dplyr::across(dplyr::all_of(aggregationGroup))) |>
         dplyr::summarize(households = dplyr::n(), foodVehicleReachHH = sum(!is.na(food_vehicle_name)), foodVehicleReachHHPerc = round(foodVehicleReachHH / households * 100, 0))
 
