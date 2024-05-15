@@ -234,101 +234,78 @@ previewData <- function(df) {
         )
 }
 
-
-#' Calculate Baseline Nutrient Inadequacy
+#' Calculate Baseline Nutrient Inadequacy (AFE Method)
 #'
-#' This function calculates the baseline inadequacy of nutrients for different administrative groups.
+#' This function calculates the baseline inadequacy of nutrients for different administrative groups using the Adequate Food Energy (AFE) Method.
 #'
-#' @param MNList A character vector of nutrients. If empty, defaults to a list of all nutrients.
-#' @param aggregationGroup A character vector of administrative groups. Must not be empty.
-#' @param dataDir The directory where the data is stored.
+#' @param householdConsumptionDf A dataframe containing household consumption data. Must contain columns: "householdId", "amountConsumedInG", "memberCount".
+#' @param householdDetailsDf A dataframe containing household details. Must contain column: "householdId".
+#' @param nctListDf A dataframe containing nutrient composition tables. Must contain columns: "nutrient", "foodId".
+#' @param intakeThresholdsDf A dataframe containing intake thresholds for nutrients. Must contain columns: "nutrient", "CND".
+#' @param aggregationGroup A character vector of administrative groups to aggregate the data. Must not be empty. Defaults to c("admin0Name", "admin1Name").
+#' @param MNList A character vector of nutrients to be included in the analysis. If empty, defaults to a comprehensive list of nutrients.
 #'
 #' @return A dataframe with the baseline inadequacy of nutrients for the specified administrative groups.
 #' @export
 #'
 #' @examples
-#' calculateBaselineInadequacyAfe(MNList = c("A", "Ca"))
-calculateBaselineInadequacyAfe <- function(householdConsumptionDf =householdConsumption,householdDetailsDf = householdDetails,nctListDf= nctList, intakeThresholdsDf = intakeThresholds, aggregationGroup = c("admin0Name", "admin1Name"), MNList = c(
-            "Ca",
-            "Carbohydrates",
-            "Cu",
-            "Energy",
-            "Fat",
-            "Fe",
-            "Fibre",
-            "I",
-            "IP6",
-            "Mg",
-            "Protein",
-            "Se",
-            "Zn",
-            "Ash",
-            "B6",
-            "B2",
-            "D",
-            "N",
-            "K",
-            "P",
-            "Moisture",
-            "Cholesterol",
-            "E",
-            "Na",
-            "A",
-            "C",
-            "B12",
-            "B1",
-            "B3",
-            "B9",
-            "B5",
-            "B7",
-            "Mn"
-        )) {
+#' calculateBaselineInadequacyAfe(
+#'     householdConsumptionDf = householdConsumption,
+#'     householdDetailsDf = householdDetails,
+#'     nctListDf = nctList,
+#'     intakeThresholdsDf = intakeThresholds,
+#'     aggregationGroup = c("admin0Name", "admin1Name"),
+#'     MNList = c("Ca", "Carbohydrates")
+#' )
+calculateBaselineInadequacyAfe <- function(
+    householdConsumptionDf = householdConsumption,
+    householdDetailsDf = householdDetails,
+    nctListDf = nctList,
+    intakeThresholdsDf = intakeThresholds,
+    aggregationGroup = c("admin0Name", "admin1Name"),
+    MNList = c("Ca", "Carbohydrates", "Cu", "Energy", "Fat", "Fe", "Fibre", "I", "IP6", "Mg", "Protein", "Se", "Zn", "Ash", "B6", "B2", "D", "N", "K", "P", "Moisture", "Cholesterol", "E", "Na", "A", "C", "B12", "B1", "B3", "B9", "B5", "B7", "Mn")) {
+    # Define required columns
+    requiredConsumptionCols <- c("householdId", "amountConsumedInG")
+    requiredDetailsCols <- c("householdId", "memberCount")
+    requiredNctCols <- c("micronutrientId")
+    requiredIntakeCols <- c("nutrient", "CND")
+
     # Check if MNList is a character vector
     if (!is.character(MNList)) {
         stop("MNList must be a character vector e.g. c('A', 'Ca')")
     }
 
-    # check if aggregationGroup is a character vector
+    # Check if aggregationGroup is a character vector
     if (!is.character(aggregationGroup)) {
         stop("aggregationGroup must be a character vector e.g. c('admin0Name', 'admin1Name')")
     }
 
-    # Check if MNLIst and aggregationGroup are not empty
+    # Check if MNList and aggregationGroup are not empty
     if (length(aggregationGroup) == 0) {
         stop("aggregationGroup cannot be empty")
     }
 
-    # Check if Df expected in the parameters are dataframes
-    if (!is.data.frame(householdConsumptionDf)) {
-        stop("householdConsumptionDf must be a dataframe")
+    # Check if input dataframes have required columns
+    if (!all(requiredConsumptionCols %in% names(householdConsumptionDf))) {
+        stop(paste("householdConsumptionDf must contain the following columns:", paste(requiredConsumptionCols, collapse = ", ")))
     }
 
-    if (!is.data.frame(householdDetailsDf)) {
-        stop("householdDetailsDf must be a dataframe")
+    if (!all(requiredDetailsCols %in% names(householdDetailsDf))) {
+        stop(paste("householdDetailsDf must contain the following column:", paste(requiredDetailsCols, collapse = ", ")))
     }
 
-    if (!is.data.frame(nctListDf)) {
-        stop("nctListDf must be a dataframe")
+    if (!all(requiredNctCols %in% names(nctListDf))) {
+        stop(paste("nctListDf must contain the following columns:", paste(requiredNctCols, collapse = ", ")))
     }
 
-    if (!is.data.frame(intakeThresholdsDf)) {
-        stop("intakeThresholdsDf must be a dataframe")
+    if (!all(requiredIntakeCols %in% names(intakeThresholdsDf))) {
+        stop(paste("intakeThresholdsDf must contain the following columns:", paste(requiredIntakeCols, collapse = ", ")))
     }
-
-
-    if (length(MNList) == 0) {
-        # Tell the user that the default list provided in the parameters is being used
-        message("No MNList provided. Using the default list of all nutrients")
-    }
-
-    
 
     # Use the createMasterNct function to create a master NCT
     masterNCT <- effectivenessCalculations::createMasterNct(nctList)
 
     ## Create a wider format for the intakeThresholds
-
-    # Create a wider format for the intakeThresholds
     earThreshholds <- intakeThresholdsDf |>
         dplyr::select(nutrient, ear) |>
         # Remove rows where ear is NA
@@ -342,7 +319,6 @@ calculateBaselineInadequacyAfe <- function(householdConsumptionDf =householdCons
         dplyr::rename_with(~ paste0(., "SupplyEarThreshold"), dplyr::everything())
 
     # Process the consumption data
-
     # Load the consumption data
     enrichedHouseholdConsumption <- householdConsumptionDf |>
         # Not necessary by its a personal preference
@@ -372,7 +348,6 @@ calculateBaselineInadequacyAfe <- function(householdConsumptionDf =householdCons
         # Bind thresholds to the data. The thresholds data has one row so it should be recycled to the number of rows in the data
         dplyr::bind_cols(earThreshholds)
 
-
     # Create adequacy columns for each nutrient
     # NOTE: This code is not pretty and can be improved. It works for now
     for (nutrient in MNList) {
@@ -390,14 +365,7 @@ calculateBaselineInadequacyAfe <- function(householdConsumptionDf =householdCons
         }
     }
 
-
-
-
-
     # Prevalence of Inadequacy Summaries
-    ## Households count summaries
-
-    # TODO: Start HERE on 27/02/2024
     # Households count summaries
     statsHouseholdCount <- enrichedHouseholdConsumption |>
         # Re_group the data by district_name and adequacy to get the total number of households with adequate and inadequate Vitamin A intake
@@ -405,69 +373,33 @@ calculateBaselineInadequacyAfe <- function(householdConsumptionDf =householdCons
         # Summarise the data to get the total number of households with adequate and inadequate Vitamin A intake
         dplyr::summarize(households = dplyr::n())
 
-
-
     ## Count Adequate and Inadequate
-
     statsCountAdequateHH <- enrichedHouseholdConsumption |>
-        # Re_group the data by district_name and adequacy to get the total number of households with adequate and inadequate Vitamin A intake
         dplyr::group_by(dplyr::across(dplyr::all_of(aggregationGroup))) |>
-        # Summarise the data to get the total number of households with adequate and inadequate Vitamin A intake
         dplyr::summarize(dplyr::across(dplyr::ends_with("Adequacy"), ~ sum(.x, na.rm = TRUE), .names = "{.col}AdeCount"))
 
     ## Count Inadequate
     statsCountInadequateHH <- enrichedHouseholdConsumption |>
-        # Re_group the data by district_name and adequacy to get the total number of households with adequate and inadequate Vitamin A intake
         dplyr::group_by(dplyr::across(dplyr::all_of(aggregationGroup))) |>
-        # Summarise the data to get the total number of households with adequate and inadequate Vitamin A intake
         dplyr::summarize(dplyr::across(dplyr::ends_with("Adequacy"), ~ sum(1 - .x, na.rm = TRUE), .names = "{.col}InadeCount"))
-
-
-    ## Percentage Inadequate
 
     # Percentage Inadequate
     statsPercentageInadequate <- statsHouseholdCount |>
         dplyr::left_join(statsCountAdequateHH) |>
-        # Summarise the data to get the total number of households with adequate and inadequate Vitamin A intake
         dplyr::mutate(dplyr::across(dplyr::ends_with("AdeCount"), ~ round(100 - (.x * 100 / households), 2), .names = "{.col}PercInadequate"))
 
-
-
     ## Median Supply
-
     statsMedianSupply <- enrichedHouseholdConsumption |>
-        # Re_group the data by district_name and adequacy to get the total number of households with adequate and inadequate Vitamin A intake
         dplyr::group_by(dplyr::across(dplyr::all_of(aggregationGroup))) |>
-        # Summarise the data to get the total number of households with adequate and inadequate Vitamin A intake
         dplyr::summarize(dplyr::across(dplyr::ends_with("Supply"), ~ round(median(.x, na.rm = TRUE), 0), .names = "{.col}MedianSupply"))
 
-
-
-
-    ## Mean Supply
-
-
-    # statsMeanSupply <- enrichedHouseholdConsumption |>
-    #     # Re_group the data by district_name and adequacy to get the total number of households with adequate and inadequate Vitamin A intake
-    #     dpdplyr::group_by(dplyr::across(dplyr::all_of(aggregationGroup))) |>
-    #     # Summarise the data to get the total number of households with adequate and inadequate Vitamin A intake
-    #     dplyr::summarize(dplyr::across(dplyr::ends_with("Supply"), ~ round(mean(.x, na.rm = TRUE), 0), .names = "{.col}MeanSupply"))
-
-
-
     ## baselineAdequacyPrevalence
-
     # Merge the stats data into one dataframe
     baselineAdequacyPrevalence <- statsHouseholdCount |>
         dplyr::left_join(statsCountInadequateHH) |>
-        # dplyr::left_join(statsCountAdequateHH) |>
         dplyr::left_join(statsPercentageInadequate) |>
         dplyr::left_join(statsMedianSupply) |>
-        # dplyr::left_join(statsMeanSupply) |>
         dplyr::bind_cols(earThreshholds)
-
-    # NOTE: The code below is not necessary but it makes the data look better
-    # Arrange the data by the "aggregationGroup",households then everything else in alphabetical order. This allows each nutrients' data to be together
 
     # Get the column order for the data
     columnOrder <- sort(names(baselineAdequacyPrevalence))
@@ -476,7 +408,6 @@ calculateBaselineInadequacyAfe <- function(householdConsumptionDf =householdCons
     baselineAdequacyPrevalence <- baselineAdequacyPrevalence |>
         dplyr::select(dplyr::all_of(columnOrder)) |>
         dplyr::select(aggregationGroup, households, dplyr::everything())
-
 
     return(baselineAdequacyPrevalence)
 }
