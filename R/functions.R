@@ -339,7 +339,7 @@ calculateBaselineInadequacyAfe <- function(householdConsumptionDf =householdCons
         # Convert all columns to numeric
         dplyr::mutate_all(as.numeric) |>
         # Add a suffix of "ear" to the column names
-        dplyr::rename_with(~ paste0(., "SupplyEarThreshold"), everything())
+        dplyr::rename_with(~ paste0(., "SupplyEarThreshold"), dplyr::everything())
 
     # Process the consumption data
 
@@ -366,7 +366,7 @@ calculateBaselineInadequacyAfe <- function(householdConsumptionDf =householdCons
         # Summarise the data to get the total nutrient intake per afe per day for each household and name the columns with the nutrient name and "Supply"
         # dplyr::summarize(dplyr::across(all_of(MNList), ~ sum(.x, na.rm = TRUE), .names = "{.col}Supply")) |> # TODO: Divide by the afe factor here
         # NOTE: Trial of Andy's suggestion
-        dplyr::summarize(dplyr::across(all_of(MNList), ~ sum(.x / 100 * amountConsumedInG, na.rm = TRUE), .names = "{.col}Supply")) |> # TODO: Divide by the afe factor here
+        dplyr::summarize(dplyr::across(dplyr::all_of(MNList), ~ sum(.x / 100 * amountConsumedInG, na.rm = TRUE), .names = "{.col}Supply")) |> # TODO: Divide by the afe factor here
         # The summaries remove the household details so we need to join them back to the data
         dplyr::left_join(householdDetailsDf) |>
         # Bind thresholds to the data. The thresholds data has one row so it should be recycled to the number of rows in the data
@@ -474,8 +474,8 @@ calculateBaselineInadequacyAfe <- function(householdConsumptionDf =householdCons
 
     # Reorder the columns for better readability
     baselineAdequacyPrevalence <- baselineAdequacyPrevalence |>
-        dplyr::select(all_of(columnOrder)) |>
-        dplyr::select(aggregationGroup, households, everything())
+        dplyr::select(dplyr::all_of(columnOrder)) |>
+        dplyr::select(aggregationGroup, households, dplyr::everything())
 
 
     return(baselineAdequacyPrevalence)
