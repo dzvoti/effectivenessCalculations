@@ -247,8 +247,8 @@ previewData <- function(df) {
 #' @export
 #'
 #' @examples
-#' calculateBaselineInadequacy(MNList = c("A", "Ca"))
-calculateBaselineInadequacy <- function(householdConsumptionDf =householdConsumption,householdDetailsDf = householdDetails,nctListDf= nctList, intakeThresholdsDf = intakeThresholds, aggregationGroup = c("admin0Name", "admin1Name"), MNList = c(
+#' calculateBaselineInadequacyAfe(MNList = c("A", "Ca"))
+calculateBaselineInadequacyAfe <- function(householdConsumptionDf =householdConsumption,householdDetailsDf = householdDetails,nctListDf= nctList, intakeThresholdsDf = intakeThresholds, aggregationGroup = c("admin0Name", "admin1Name"), MNList = c(
             "Ca",
             "Carbohydrates",
             "Cu",
@@ -324,7 +324,7 @@ calculateBaselineInadequacy <- function(householdConsumptionDf =householdConsump
     
 
     # Use the createMasterNct function to create a master NCT
-    masterNCT <- createMasterNct(nctList)
+    masterNCT <- effectivenessCalculations::createMasterNct(nctList)
 
     ## Create a wider format for the intakeThresholds
 
@@ -385,8 +385,8 @@ calculateBaselineInadequacy <- function(householdConsumptionDf =householdConsump
         adequacy_col <- paste0(nutrient, "EarAdequacy")
 
         # Only create the adequacy column if enrichedHouseholdConsumption[[threshold_col]] is not NA.
-        if (!is.na(getMnThresholds(intakeThresholds, nutrient, "ear"))) {
-            enrichedHouseholdConsumption[[adequacy_col]] <- ifelse(enrichedHouseholdConsumption[[supply_col]] >= getMnThresholds(intakeThresholdsDf, nutrient, "ear"), 1, 0)
+        if (!is.na(effectivenessCalculations::getMnThresholds(intakeThresholds, nutrient, "ear"))) {
+            enrichedHouseholdConsumption[[adequacy_col]] <- ifelse(enrichedHouseholdConsumption[[supply_col]] >= effectivenessCalculations::getMnThresholds(intakeThresholdsDf, nutrient, "ear"), 1, 0)
         }
     }
 
