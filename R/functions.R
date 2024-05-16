@@ -624,9 +624,9 @@ calculateFoodVehicleHouseholdReach <- function(householdConsumptionDf = househol
     return(foodVehicleHouseholdReach)
 }
 
-#' Calculate Baseline Nutrient Inadequacy (AFE Method)
+#' Calculate Baseline High Intake Risk of Nutrients (AFE Method)
 #'
-#' This function calculates the baseline inadequacy of nutrients for different administrative groups using the Adequate Food Energy (AFE) Method.
+#' This function calculates the baseline risk of high nutrient intake for different administrative groups using the Adequate Food Energy (AFE) Method. It compares daily apparent micronutrient intake per AFE to the tolerable upper intake levels (UL) to classify household diets as at risk of high intake. The results are summarized at national and subnational levels.
 #'
 #' @param householdConsumptionDf A dataframe containing household consumption data. Must contain columns: "householdId", "amountConsumedInG", "memberCount".
 #' @param householdDetailsDf A dataframe containing household details. Must contain column: "householdId".
@@ -738,19 +738,19 @@ calculateBaselinePrevalenceHighIntakeRiskAfe <- function(
         dplyr::group_by(dplyr::across(dplyr::all_of(aggregationGroup))) |>
         dplyr::summarize(dplyr::across(dplyr::ends_with("Supply"), ~ round(median(.x, na.rm = TRUE), 0), .names = "{.col}MedianSupply"))
 
-    baselineAdequacyPrevalence <- statsHouseholdCount |>
+    baselineHighIntakeRisk <- statsHouseholdCount |>
         dplyr::left_join(statsCountHighIntakeRisk) |>
         dplyr::left_join(statsPercentageHighIntakeRisk) |>
         dplyr::left_join(statsMedianSupply) |>
         dplyr::bind_cols(upperIntakeLevel)
 
-    columnOrder <- sort(names(baselineAdequacyPrevalence))
+    columnOrder <- sort(names(baselineHighIntakeRisk))
 
-    baselineAdequacyPrevalence <- baselineAdequacyPrevalence |>
+    baselineHighIntakeRisk <- baselineHighIntakeRisk |>
         dplyr::select(dplyr::all_of(columnOrder)) |>
         dplyr::select(aggregationGroup, households, dplyr::everything())
 
-    return(baselineAdequacyPrevalence)
+    return(baselineHighIntakeRisk)
 }
 
 
