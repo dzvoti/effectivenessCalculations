@@ -27,27 +27,31 @@ loadCsvFiles <- function(folder_path) {
     }
 }
 
-#' Load all .rda files in a directory
+#' Load RDA Files from a Directory
 #'
-#' This function loads all .rda files in the specified directory into the global environment.
+#' This function lists all `.rda` files in a specified directory and loads them into the global environment.
 #'
-#' @param dir A character string specifying the directory to load .rda files from.
-#'
-#' @return Invisible NULL. This function is called for its side effect of loading .rda files into the global environment.
-#'
+#' @param dir A character string specifying the directory from which to load the `.rda` files. Defaults to `"data/sd123"`.
+#' @return This function does not return a value. It loads the `.rda` files into the global environment.
 #' @examples
 #' \dontrun{
-#' load_all_rda_files("data/sd123")
-#' }
+#' # Load .rda files from the default directory
+#' load_rda_files()
 #'
+#' # Load .rda files from a custom directory
+#' load_rda_files("your/custom/path")
+#' }
 #' @export
-load_all_rda_files <- function(dir) {
-    # Get all .rda files in the dir
-    rda_files <- list.files(dir, pattern = "\\.rda$", full.names = TRUE)
+load_rda_files <- function(dir = "data/sd123") {
+    # List .rda files in the specified directory
+    rdaFiles <- list.files(dir, pattern = "\\.rda$", full.names = TRUE)
 
-    # Load all .rda files
-    lapply(rda_files, load, .GlobalEnv)
+    # Load the .rda files into the global environment
+    for (rdaFile in rdaFiles) {
+        load(here::here(rdaFile), envir = .GlobalEnv)
+    }
 }
+
 
 #' Load all .rda files in a directory
 #'
@@ -584,7 +588,6 @@ calculateBaselineInadequacyCND <- function(
     return(baselineCNDAdequacyPrevalence)
 }
 
-# TODO:10 May 2024 Update
 #' Calculate Food Vehicle Household Reach
 #'
 #' This function calculates the household reach for each food vehicle. It filters the fortifiable food items to get the food vehicle, processes the consumption data, and then calculates the household reach.
