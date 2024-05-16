@@ -13,11 +13,11 @@ calculateFoodVehicleHouseholdReach(
 )
 }
 \arguments{
-\item{householdConsumptionDf}{A dataframe containing household consumption data. Default is \code{householdConsumption}.}
+\item{householdConsumptionDf}{A dataframe containing household consumption data. Must contain columns: "foodGenusId", "householdId".}
 
-\item{householdDetailsDf}{A dataframe containing household details. Default is \code{householdDetails}.}
+\item{householdDetailsDf}{A dataframe containing household details. Must contain column: "householdId".}
 
-\item{fortifiableFoodItemsDf}{A dataframe containing fortifiable food items. Default is \code{fortifiable_food_items}.}
+\item{fortifiableFoodItemsDf}{A dataframe containing fortifiable food items. Must contain columns: "food_genus_id", "food_vehicle_name".}
 
 \item{foodVehicleName}{A string specifying the food vehicle name. Default is "wheat flour".}
 
@@ -30,6 +30,12 @@ A dataframe with the household reach for the specified food vehicle.
 This function calculates the household reach for each food vehicle. It filters the fortifiable food items to get the food vehicle, processes the consumption data, and then calculates the household reach.
 }
 \examples{
-calculateFoodVehicleHouseholdReach(householdConsumption, householdDetails, fortifiable_food_items, "wheat flour", c("admin0Name", "admin1Name"))
+calculateFoodVehicleHouseholdReach(
+    householdConsumptionDf = householdConsumption,
+    householdDetailsDf = householdDetails,
+    fortifiableFoodItemsDf = fortifiable_food_items,
+    foodVehicleName = "wheat flour",
+    aggregationGroup = c("admin0Name", "admin1Name")
+)
 
 }

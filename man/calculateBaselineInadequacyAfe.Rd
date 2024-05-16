@@ -2,7 +2,7 @@
 % Please edit documentation in R/functions.R
 \name{calculateBaselineInadequacyAfe}
 \alias{calculateBaselineInadequacyAfe}
-\title{Calculate Baseline Nutrient Inadequacy}
+\title{Calculate Baseline Nutrient Inadequacy (AFE Method)}
 \usage{
 calculateBaselineInadequacyAfe(
   householdConsumptionDf = householdConsumption,
@@ -16,18 +16,31 @@ calculateBaselineInadequacyAfe(
 )
 }
 \arguments{
-\item{aggregationGroup}{A character vector of administrative groups. Must not be empty.}
+\item{householdConsumptionDf}{A dataframe containing household consumption data. Must contain columns: "householdId", "amountConsumedInG", "memberCount".}
 
-\item{MNList}{A character vector of nutrients. If empty, defaults to a list of all nutrients.}
+\item{householdDetailsDf}{A dataframe containing household details. Must contain column: "householdId".}
 
-\item{dataDir}{The directory where the data is stored.}
+\item{nctListDf}{A dataframe containing nutrient composition tables. Must contain columns: "nutrient", "foodId".}
+
+\item{intakeThresholdsDf}{A dataframe containing intake thresholds for nutrients. Must contain columns: "nutrient", "CND".}
+
+\item{aggregationGroup}{A character vector of administrative groups to aggregate the data. Must not be empty. Defaults to c("admin0Name", "admin1Name").}
+
+\item{MNList}{A character vector of nutrients to be included in the analysis. If empty, defaults to a comprehensive list of nutrients.}
 }
 \value{
 A dataframe with the baseline inadequacy of nutrients for the specified administrative groups.
 }
 \description{
-This function calculates the baseline inadequacy of nutrients for different administrative groups.
+This function calculates the baseline inadequacy of nutrients for different administrative groups using the Adequate Food Energy (AFE) Method.
 }
 \examples{
-calculateBaselineInadequacyAfe(MNList = c("A", "Ca"))
+calculateBaselineInadequacyAfe(
+    householdConsumptionDf = householdConsumption,
+    householdDetailsDf = householdDetails,
+    nctListDf = nctList,
+    intakeThresholdsDf = intakeThresholds,
+    aggregationGroup = c("admin0Name", "admin1Name"),
+    MNList = c("Ca", "Carbohydrates")
+)
 }
