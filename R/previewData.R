@@ -22,6 +22,8 @@
 #'
 #' @export
 #' @keywords internal
+#' @importFrom stats median
+#' @importFrom utils head
 previewData <- function(df) {
     df |>
         head(1000) |>

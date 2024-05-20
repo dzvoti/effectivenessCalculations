@@ -10,7 +10,8 @@
 #'
 #' @examples
 #' \dontrun{
-#' intakeThresholds <- data.frame(nutrient = c("vitaminA", "vitaminB", "vitaminC"), ear = c(0.5, 0.6, 0.7), ul = c(1, 1.2, 1.3), unitAdequacy = c(0.8, 0.9, 1))
+#' intakeThresholds <- data.frame(nutrient = c("vitaminA", "vitaminB", "vitaminC"),
+#'  ear = c(0.5, 0.6, 0.7), ul = c(1, 1.2, 1.3), unitAdequacy = c(0.8, 0.9, 1))
 #' thresholds <- getMnThresholds(intakeThresholds, "vitaminA", "ul")
 #' }
 #'

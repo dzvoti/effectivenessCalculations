@@ -10,7 +10,10 @@
 #'
 #' @examples
 #' \dontrun{
-#' df <- data.frame(food = c("apple", "banana", "carrot"), consumption = c(100, 200, 150), vitaminA = c(0.5, 0.6, 0.7))
+#' df <- data.frame(
+#'     food = c("apple", "banana", "carrot"),
+#'     consumption = c(100, 200, 150), vitaminA = c(0.5, 0.6, 0.7)
+#' )
 #' df <- calculateMNsContent(df, "consumption", c("vitaminA"))
 #' }
 #'
@@ -35,7 +38,10 @@ calculateMNsContent <- function(df, consumptionCol, MNs) {
 #'
 #' @examples
 #' \dontrun{
-#' df <- data.frame(food = c("apple", "banana", "carrot"), consumption = c(100, 200, 150), afe = c(2, 3, 4))
+#' df <- data.frame(
+#'     food = c("apple", "banana", "carrot"),
+#'     consumption = c(100, 200, 150), afe = c(2, 3, 4)
+#' )
 #' df <- calculateConsPerAfe(df, "consumption", "afe")
 #' }
 #'
