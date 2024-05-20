@@ -14,6 +14,7 @@
 #' thresholds <- getMnThresholds(intakeThresholds, "vitaminA", "ul")
 #' }
 #'
+#' @export
 #' @keywords internal
 getMnThresholds <- function(intakeThresholds, nutrient, param = "ear") {
     threshold <- as.numeric(intakeThresholds[intakeThresholds$nutrient == nutrient, param])

@@ -12,6 +12,8 @@
 #' }
 #'
 #' @return None. This function does not return a value; it assigns variables in the global environment.
+#'
+#' @export
 #' @keywords internal
 loadCsvFiles <- function(folder_path) {
     file_paths <- list.files(path = folder_path, pattern = "\\.csv$", full.names = TRUE)

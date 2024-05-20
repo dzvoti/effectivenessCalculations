@@ -15,6 +15,7 @@
 #' createMasterNct(nctList)
 #' }
 #'
+#' @export
 #' @keywords internal
 createMasterNct <- function(nctList, fctListIdCol = "fctListId", foodGenusIdCol = "foodGenusId", micronutrientIdCol = "micronutrientId", micronutrientCompositionCol = "micronutrientComposition") {
     # if (checkData()) {

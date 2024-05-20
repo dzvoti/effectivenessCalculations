@@ -20,6 +20,7 @@
 #' previewData(df)
 #' }
 #'
+#' @export
 #' @keywords internal
 previewData <- function(df) {
     df |>

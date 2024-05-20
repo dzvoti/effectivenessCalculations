@@ -13,6 +13,7 @@
 #' df <- enforceNumeric(df, c("a", "b"))
 #' }
 #'
+#' @export
 #' @keywords internal
 enforceNumeric <- function(df, cols) {
     df <- df |> dplyr::mutate_at(cols, as.numeric)

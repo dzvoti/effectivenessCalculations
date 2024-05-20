@@ -9,6 +9,8 @@
 #' checkData()
 #' }
 #'
+#' @export
+#'
 #' @keywords internal
 checkData <- function() {
     # Check if the data is loaded
