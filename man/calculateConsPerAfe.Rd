@@ -21,7 +21,10 @@ This function calculates the consumption per AFE for each food item in a datafra
 }
 \examples{
 \dontrun{
-df <- data.frame(food = c("apple", "banana", "carrot"), consumption = c(100, 200, 150), afe = c(2, 3, 4))
+df <- data.frame(
+    food = c("apple", "banana", "carrot"),
+    consumption = c(100, 200, 150), afe = c(2, 3, 4)
+)
 df <- calculateConsPerAfe(df, "consumption", "afe")
 }
 

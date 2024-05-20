@@ -21,7 +21,10 @@ This function calculates the micronutrient content for each food item in a dataf
 }
 \examples{
 \dontrun{
-df <- data.frame(food = c("apple", "banana", "carrot"), consumption = c(100, 200, 150), vitaminA = c(0.5, 0.6, 0.7))
+df <- data.frame(
+    food = c("apple", "banana", "carrot"),
+    consumption = c(100, 200, 150), vitaminA = c(0.5, 0.6, 0.7)
+)
 df <- calculateMNsContent(df, "consumption", c("vitaminA"))
 }
 
