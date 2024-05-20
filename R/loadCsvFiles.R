@@ -17,17 +17,20 @@
 #' @keywords internal
 loadCsvFiles <- function(folder_path) {
     file_paths <- list.files(path = folder_path, pattern = "\\.csv$", full.names = TRUE)
+    data_list <- list()
 
     # Iterate over each file path
-    for (file_path in file_paths) {
+    for (i in seq_along(file_paths)) {
         # Extract the base name without the extension
-        file_name <- tools::file_path_sans_ext(basename(file_path))
+        file_name <- tools::file_path_sans_ext(basename(file_paths[i]))
 
         # Read the CSV file and clean names
-        data <- readr::read_csv(file_path) |>
+        data <- readr::read_csv(file_paths[i]) |>
             janitor::clean_names()
 
-        # Assign it to a dynamically named variable in the global environment
-        assign(file_name, data, envir = .GlobalEnv)
+        # Assign it to a dynamically named element in the list
+        data_list[[file_name]] <- data
     }
+
+    return(data_list)
 }
