@@ -8,14 +8,17 @@
 #' @return A DT::datatable object showing the first 1000 rows of the input dataframe.
 #'
 #' @examples
+#' \dontrun{
 #' # Create a dataframe
 #' df <- data.frame(
 #'     x = rnorm(5000),
 #'     y = rnorm(5000),
 #'     z = rnorm(5000)
 #' )
+#'
 #' # Preview the dataframe
 #' previewData(df)
+#' }
 #'
 #' @keywords internal
 previewData <- function(df) {
