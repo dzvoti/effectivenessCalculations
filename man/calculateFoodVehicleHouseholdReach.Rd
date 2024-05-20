@@ -30,6 +30,7 @@ A dataframe with the household reach for the specified food vehicle.
 This function calculates the household reach for each food vehicle. It filters the fortifiable food items to get the food vehicle, processes the consumption data, and then calculates the household reach.
 }
 \examples{
+\dontrun{
 calculateFoodVehicleHouseholdReach(
     householdConsumptionDf = householdConsumption,
     householdDetailsDf = householdDetails,
@@ -37,5 +38,6 @@ calculateFoodVehicleHouseholdReach(
     foodVehicleName = "wheat flour",
     aggregationGroup = c("admin0Name", "admin1Name")
 )
+}
 
 }

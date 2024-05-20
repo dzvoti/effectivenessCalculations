@@ -35,6 +35,7 @@ A dataframe with the baseline inadequacy of nutrients for the specified administ
 This function calculates the baseline risk of high nutrient intake for different administrative groups using the Adequate Food Energy (AFE) Method. It compares daily apparent micronutrient intake per AFE to the tolerable upper intake levels (UL) to classify household diets as at risk of high intake. The results are summarized at national and subnational levels.
 }
 \examples{
+\dontrun{
 calculateBaselineInadequacyAfe(
     householdConsumptionDf = householdConsumption,
     householdDetailsDf = householdDetails,
@@ -43,4 +44,5 @@ calculateBaselineInadequacyAfe(
     aggregationGroup = c("admin0Name", "admin1Name"),
     MNList = c("Ca", "Carbohydrates")
 )
+}
 }

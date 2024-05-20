@@ -35,6 +35,7 @@ A dataframe with the baseline inadequacy of nutrients for the specified administ
 This function calculates the baseline inadequacy of nutrients for different administrative groups using the Nutrient Density Method.
 }
 \examples{
+\dontrun{
 calculateBaselineInadequacyCND(
     householdConsumptionDf = householdConsumption,
     householdDetailsDf = householdDetails,
@@ -43,4 +44,5 @@ calculateBaselineInadequacyCND(
     aggregationGroup = c("admin0Name", "admin1Name"),
     MNList = c("Ca", "Carbohydrates")
 )
+}
 }

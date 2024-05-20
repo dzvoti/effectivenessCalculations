@@ -18,7 +18,9 @@ Each CSV file is read into a data frame, its column names are cleaned, and it is
 assigned to a variable named after the file (without the .csv extension).
 }
 \examples{
+\dontrun{
 loadCsvFiles("path/to/your/csvfiles")
+}
 
 }
 \keyword{internal}
