@@ -7,7 +7,9 @@
 #' @param folder_path A string. The path to the folder containing the CSV files.
 #'
 #' @examples
+#' \dontrun{
 #' loadCsvFiles("path/to/your/csvfiles")
+#' }
 #'
 #' @return None. This function does not return a value; it assigns variables in the global environment.
 #' @keywords internal
