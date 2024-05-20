@@ -11,6 +11,7 @@
 #' @return A dataframe with the household reach for the specified food vehicle.
 #'
 #' @examples
+#' \dontrun{
 #' calculateFoodVehicleHouseholdReach(
 #'     householdConsumptionDf = householdConsumption,
 #'     householdDetailsDf = householdDetails,
@@ -18,6 +19,7 @@
 #'     foodVehicleName = "wheat flour",
 #'     aggregationGroup = c("admin0Name", "admin1Name")
 #' )
+#' }
 #'
 #' @export
 calculateFoodVehicleHouseholdReach <- function(
