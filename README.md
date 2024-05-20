@@ -6,7 +6,9 @@
 <!-- badges: start -->
 
 [![CRAN status]()]() [![License]()]() [![Version]()](1.0.1)
-[![Downloads]()]() <!-- badges: end -->
+[![Downloads]()]()
+[![R-CMD-check](https://github.com/dzvoti/effectivenessCalculations/actions/workflows/R-CMD-check.yaml/badge.svg)](https://github.com/dzvoti/effectivenessCalculations/actions/workflows/R-CMD-check.yaml)
+<!-- badges: end -->
 
 The goal of effectivenessCalculations is to provide functions for
 calculating various metrics related to nutritional effectiveness, such

@@ -6,3 +6,4 @@
 ^README\.Rmd$
 ^excludeR$
 ^data$
+^\.github$

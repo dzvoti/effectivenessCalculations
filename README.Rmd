@@ -20,6 +20,7 @@ knitr::opts_chunk$set(
 [![License]()]()
 [![Version]()](1.0.1)
 [![Downloads]()]()
+[![R-CMD-check](https://github.com/dzvoti/effectivenessCalculations/actions/workflows/R-CMD-check.yaml/badge.svg)](https://github.com/dzvoti/effectivenessCalculations/actions/workflows/R-CMD-check.yaml)
 <!-- badges: end -->
 
 The goal of effectivenessCalculations is to provide functions for calculating various metrics related to nutritional effectiveness, such as baseline inadequacy and household reach for food vehicles.
@@ -94,5 +95,6 @@ calculateFoodVehicleHouseholdReach(
   aggregationGroup = c("admin0Name", "admin1Name")
 )
 ```
+
 
 
