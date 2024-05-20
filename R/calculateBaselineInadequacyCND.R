@@ -13,6 +13,7 @@
 #' @export
 #'
 #' @examples
+#' \dontrun{
 #' calculateBaselineInadequacyCND(
 #'     householdConsumptionDf = householdConsumption,
 #'     householdDetailsDf = householdDetails,
@@ -21,6 +22,7 @@
 #'     aggregationGroup = c("admin0Name", "admin1Name"),
 #'     MNList = c("Ca", "Carbohydrates")
 #' )
+#' }
 calculateBaselineInadequacyCND <- function(
     householdConsumptionDf = householdConsumption,
     householdDetailsDf = householdDetails,
