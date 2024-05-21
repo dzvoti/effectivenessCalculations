@@ -4,10 +4,11 @@
 # effectivenessCalculations
 
 <!-- badges: start -->
+<!-- [![CRAN status]()]()
+[![License](https://github.com/dzvoti/effectivenessCalculations?tab=MIT-2-ov-file)](https://github.com/dzvoti/effectivenessCalculations?tab=MIT-2-ov-file) -->
 
-[![CRAN status]()]()
-[![License](https://github.com/dzvoti/effectivenessCalculations?tab=MIT-2-ov-file)](https://github.com/dzvoti/effectivenessCalculations?tab=MIT-2-ov-file)
-[![Version](https://img.shields.io/badge/version-v1.01-blue)]() [![Life
+[![Version](https://img.shields.io/badge/version-v0.2.0-blue)](https://img.shields.io/badge/version-v0.2.0-blue)
+[![Life
 cycle](https://img.shields.io/badge/lifecycle-experimental-orange.svg)](https://lifecycle.r-lib.org/articles/stages.html)
 [![R-CMD-check](https://github.com/dzvoti/effectivenessCalculations/actions/workflows/R-CMD-check.yaml/badge.svg)](https://github.com/dzvoti/effectivenessCalculations/actions/workflows/R-CMD-check.yaml)
 <!-- badges: end -->
