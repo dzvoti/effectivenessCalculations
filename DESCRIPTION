@@ -18,3 +18,6 @@ Imports:
     readr,
     tibble,
     tidyr
+Suggests: 
+    spelling
+Language: en-US
