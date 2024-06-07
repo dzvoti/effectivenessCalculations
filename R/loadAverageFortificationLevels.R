@@ -9,10 +9,10 @@
 #' @param fortificationLevels A dataframe containing the average fortification levels.
 #' @return A numeric value representing the average fortification level for the specified year and micronutrient.
 #' @examples
-#' @keywords internal
 #' \dontrun{
-#' avgFortificationLevel <- yearAverageFortificationLevel("salt", 2024, "iodine")
+#' avgFortificationLevel <- yearAverageFortificationLevel("wheat flour", 2024, "A")
 #' }
+#' @keywords internal
 yearAverageFortificationLevel <- function(fortification_vehicle, Year, MN, fortificationLevels = readr::read_csv(here::here("data/average_fortification_levels.csv"))) {
     yearAverageFortificationLevel <- fortificationLevels[fortificationLevels$Year == Year, MN][[1]]
 
