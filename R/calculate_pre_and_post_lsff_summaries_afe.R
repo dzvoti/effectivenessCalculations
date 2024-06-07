@@ -5,7 +5,7 @@
 #' @param householdConsumptionDf A dataframe containing household consumption data. Must contain columns: "householdId", "amountConsumedInG".
 #' @param householdDetailsDf A dataframe containing household details. Must contain columns: "householdId", "memberCount".
 #' @param nctListDf A dataframe containing nutrient composition tables. Must contain column: "nutrient".
-#' @param intakeThresholdsDf A dataframe containing intake thresholds for nutrients. Must contain columns: "nutrient", "CND".
+#' @param intakeThresholdsDf A dataframe containing intake thresholds for nutrients. Must contain columns: "nutrient", "ear".
 #' @param aggregationGroup A character vector of administrative groups to aggregate the data. Must not be empty. Defaults to c("admin0Name", "admin1Name").
 #' @param fortifiableFoodItemsDf A dataframe containing fortifiable food items. Generated using the function `createFortifiableFoodItemsTable()`.
 #' @param foodVehicleName A character string specifying the name of the food vehicle for fortification. Defaults to "wheat flour".
@@ -29,7 +29,7 @@
 #'     MNList = c("A", "Ca")
 #' )
 #' }
-calculate_pre_and_post_lsff_summaries <- function(
+calculate_pre_and_post_lsff_summaries_afe <- function(
     householdConsumptionDf = householdConsumption,
     householdDetailsDf = householdDetails,
     nctListDf = nctList,
