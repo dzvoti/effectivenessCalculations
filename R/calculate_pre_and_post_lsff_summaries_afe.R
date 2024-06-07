@@ -1,29 +1,35 @@
-#' Calculate Baseline Nutrient Inadequacy (AFE Method)
+#' Calculate Pre and Post LSFF Nutrient Summaries
 #'
-#' This function calculates the baseline inadequacy of nutrients for different administrative groups using the Adequate Food Energy (AFE) Method.
+#' This function calculates summaries of nutrient inadequacy before and after large-scale food fortification (LSFF) for different administrative groups using the Adult Female Equivalent (AFE) Method.
 #'
-#' @param householdConsumptionDf A dataframe containing household consumption data. Must contain columns: "householdId", "amountConsumedInG", "memberCount".
-#' @param householdDetailsDf A dataframe containing household details. Must contain column: "householdId".
-#' @param nctListDf A dataframe containing nutrient composition tables. Must contain columns: "nutrient", "foodId".
+#' @param householdConsumptionDf A dataframe containing household consumption data. Must contain columns: "householdId", "amountConsumedInG".
+#' @param householdDetailsDf A dataframe containing household details. Must contain columns: "householdId", "memberCount".
+#' @param nctListDf A dataframe containing nutrient composition tables. Must contain column: "nutrient".
 #' @param intakeThresholdsDf A dataframe containing intake thresholds for nutrients. Must contain columns: "nutrient", "CND".
 #' @param aggregationGroup A character vector of administrative groups to aggregate the data. Must not be empty. Defaults to c("admin0Name", "admin1Name").
-#' @param MNList A character vector of nutrients to be included in the analysis. If empty, defaults to a comprehensive list of nutrients.
+#' @param fortifiableFoodItemsDf A dataframe containing fortifiable food items. Generated using the function `createFortifiableFoodItemsTable()`.
+#' @param foodVehicleName A character string specifying the name of the food vehicle for fortification. Defaults to "wheat flour".
+#' @param years A numeric vector specifying the years for which LSFF is analyzed. Defaults to 2021:2024.
+#' @param MNList A character vector of nutrients to be included in the analysis. Defaults to "A". Must not be empty.
 #'
-#' @return A dataframe with the baseline inadequacy of nutrients for the specified administrative groups.
+#' @return A dataframe with the summaries of nutrient inadequacy for the specified administrative groups before and after LSFF.
 #' @export
 #'
 #' @examples
 #' \dontrun{
-#' calculateBaselineInadequacyAfe(
+#' calculate_pre_and_post_lsff_summaries(
 #'     householdConsumptionDf = householdConsumption,
 #'     householdDetailsDf = householdDetails,
 #'     nctListDf = nctList,
 #'     intakeThresholdsDf = intakeThresholds,
 #'     aggregationGroup = c("admin0Name", "admin1Name"),
-#'     MNList = c("Ca", "Carbohydrates")
+#'     fortifiableFoodItemsDf = createFortifiableFoodItemsTable(),
+#'     foodVehicleName = "wheat flour",
+#'     years = c(2021:2024),
+#'     MNList = c("A", "Ca")
 #' )
 #' }
-calculate_pre_and_post_lsff_summaries_afe <- function(
+calculate_pre_and_post_lsff_summaries <- function(
     householdConsumptionDf = householdConsumption,
     householdDetailsDf = householdDetails,
     nctListDf = nctList,
@@ -32,7 +38,6 @@ calculate_pre_and_post_lsff_summaries_afe <- function(
     fortifiableFoodItemsDf = createFortifiableFoodItemsTable(),
     foodVehicleName = "wheat flour",
     years = c(2021:2024),
-    # MNList = c("Ca", "Carbohydrates", "Cu", "Energy", "Fat", "Fe", "Fibre", "I", "IP6", "Mg", "Protein", "Se", "Zn", "Ash", "B6", "B2", "D", "N", "K", "P", "Moisture", "Cholesterol", "E", "Na", "A", "C", "B12", "B1", "B3", "B9", "B5", "B7", "Mn"),
     MNList = "A") {
     # Define required columns
     requiredConsumptionCols <- c("householdId", "amountConsumedInG")
@@ -107,7 +112,6 @@ calculate_pre_and_post_lsff_summaries_afe <- function(
         dplyr::mutate(dplyr::across(MNList, ~ . / afeFactor), amountConsumedInGAfe = amountConsumedInG / afeFactor) |>
         dplyr::bind_cols(earThreshholds)
 
-
     # Calculate HH count summaries
     HHCountSummaries <- enrichedHouseholdConsumption |>
         dplyr::group_by(dplyr::across(dplyr::all_of(aggregationGroup))) |>
@@ -166,8 +170,6 @@ calculate_pre_and_post_lsff_summaries_afe <- function(
         dplyr::left_join(amountConsumedContainingFortificant) |>
         dplyr::left_join(fortificationVehicleAmountsConsumedAfe)
 
-
-
     for (nutrient in MNList) {
         enrichedHouseholdConsumption[paste0(nutrient, "_BaseSupply")] <- enrichedHouseholdConsumption[nutrient] / 100 * enrichedHouseholdConsumption["amountConsumedInG"]
 
@@ -177,7 +179,7 @@ calculate_pre_and_post_lsff_summaries_afe <- function(
         }
     }
 
-    # aggregate nutrient supplies by household
+    # Aggregate nutrient supplies by household
     nutrientSupply <- enrichedHouseholdConsumption |>
         dplyr::group_by(householdId) |>
         dplyr::summarize(
@@ -204,19 +206,16 @@ calculate_pre_and_post_lsff_summaries_afe <- function(
 
     # Remerge the household details
     enrichedNutrientSupply <- nutrientSupply |>
-        # corce afefactor to numeric
         dplyr::left_join(householdDetailsDf) |>
         dplyr::bind_cols(earThreshholds)
 
-
     # Create adequacy columns for each Baseline and LSFF nutrient supply
-    # NOTE: This code is not pretty and can be improved. It works for now
     for (nutrient in MNList) {
-        if (!is.na(effectivenessCalculations::getMnThresholds(intakeThresholds, nutrient, "ear"))) {
+        if (!is.na(effectivenessCalculations::getMnThresholds(intakeThresholdsDf, nutrient, "ear"))) {
             enrichedNutrientSupply[paste0(nutrient, "_base_supply_ear_inadequacy")] <- ifelse(enrichedNutrientSupply[paste0(nutrient, "_BaseSupply")] >= effectivenessCalculations::getMnThresholds(intakeThresholdsDf, nutrient, "ear"), 0, 1)
         }
         for (year in years) {
-            if (!is.na(effectivenessCalculations::getMnThresholds(intakeThresholds, nutrient, "ear"))) {
+            if (!is.na(effectivenessCalculations::getMnThresholds(intakeThresholdsDf, nutrient, "ear"))) {
                 enrichedNutrientSupply[paste0(nutrient, "_", year, "_base_and_lsff_ear_inadequacy")] <- ifelse(enrichedNutrientSupply[paste0(nutrient, "_", year, "_BaseAndLSFFTotalSupply")] >= effectivenessCalculations::getMnThresholds(intakeThresholdsDf, nutrient, "ear"), 0, 1)
             }
         }
@@ -224,11 +223,11 @@ calculate_pre_and_post_lsff_summaries_afe <- function(
 
     # Check if the intake is above the Upper Limit
     for (nutrient in MNList) {
-        if (!is.na(effectivenessCalculations::getMnThresholds(intakeThresholds, nutrient, "ul"))) {
+        if (!is.na(effectivenessCalculations::getMnThresholds(intakeThresholdsDf, nutrient, "ul"))) {
             enrichedNutrientSupply[paste0(nutrient, "_base_ul_exceedance")] <- ifelse(enrichedNutrientSupply[paste0(nutrient, "_BaseSupply")] > effectivenessCalculations::getMnThresholds(intakeThresholdsDf, nutrient, "ul"), 1, 0)
         }
         for (year in years) {
-            if (!is.na(effectivenessCalculations::getMnThresholds(intakeThresholds, nutrient, "ul"))) {
+            if (!is.na(effectivenessCalculations::getMnThresholds(intakeThresholdsDf, nutrient, "ul"))) {
                 enrichedNutrientSupply[paste0(nutrient, "_", year, "_base_and_lsff_ul_exceedance")] <- ifelse(enrichedNutrientSupply[paste0(nutrient, "_", year, "_BaseAndLSFFTotalSupply")] > effectivenessCalculations::getMnThresholds(intakeThresholdsDf, nutrient, "ul"), 1, 0)
             }
         }
