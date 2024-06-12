@@ -33,7 +33,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="index.html">effectivenessCalculations</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">0.2.0</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">1.1.1</span>
       </span>
     </div>
 
@@ -72,65 +72,39 @@
 <span><span class="fu">devtools</span><span class="fu">::</span><span class="fu">install_github</span><span class="op">(</span><span class="st">"dzvoti/effectivenessCalculations"</span><span class="op">)</span></span></code></pre></div>
 </div>
 <div class="section level2">
-<h2 id="baseline-inadequacy-statistics-example">Baseline Inadequacy Statistics Example<a class="anchor" aria-label="anchor" href="#baseline-inadequacy-statistics-example"></a>
+<h2 id="basic-examples">Basic Examples<a class="anchor" aria-label="anchor" href="#basic-examples"></a>
 </h2>
-<p>This is a basic example which shows you how to calculate the baseline inadequacy for a micronutrient. The function <code>calculateBaselineInadequacyAfe</code> calculates the baseline inadequacy for a micronutrient.The function <code>calculateBaselineInadequacyCND</code> calculates the baseline inadequacy based on nutrient density. <!-- The function takes the following arguments: --> <!-- - `MNList`: A character vector containing the names of the micronutrients for which the baseline inadequacy is to be calculated.
-- `aggregationGroup`: A character vector containing the names of the columns to be used for aggregation. The baseline inadequacy will be calculated for each unique combination of the values in the columns specified in this vector.
-- `householdConsumptionDf`: A data frame containing the household consumption data.
-- `householdDetailsDf`: A data frame containing the household details.
-- `intakeThresholds`: A data frame containing the intake thresholds for the micronutrients.
-- `nctList`: A data frame containing the nutrient content of the food items. --></p>
 <div class="section level3">
-<h3 id="baseline-inadequacy-based-on-apparent-intake-per-adult-female-equivalentafe">Baseline Inadequacy Based on apparent intake per Adult Female Equivalent(AFE)<a class="anchor" aria-label="anchor" href="#baseline-inadequacy-based-on-apparent-intake-per-adult-female-equivalentafe"></a>
+<h3 id="calculate-pre-and-post-fortification-intake-supplies-fortification-vehicle-reach-and-inadequacy-summaries">Calculate pre and post fortification intake supplies, fortification vehicle reach and Inadequacy Summaries<a class="anchor" aria-label="anchor" href="#calculate-pre-and-post-fortification-intake-supplies-fortification-vehicle-reach-and-inadequacy-summaries"></a>
 </h3>
+<p>This is how to calculate the pre and post fortification intake supplies, fortification vehicle reach and Inadequacy Summaries. The function <code>calculate_pre_and_post_lsff_summaries_afe</code> calculates the pre and post fortification intake supplies, fortification vehicle reach and Inadequacy Summaries.</p>
 <div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va">effectivenessCalculations</span><span class="op">)</span></span>
-<span><span class="co"># Calculate baseline inadequacy for a micronutrient</span></span>
-<span><span class="fu"><a href="reference/calculateBaselineInadequacyAfe.html">calculateBaselineInadequacyAfe</a></span><span class="op">(</span></span>
-<span>  MNList <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"A"</span><span class="op">)</span>,</span>
-<span>  householdConsumptionDf <span class="op">=</span> <span class="va">householdConsumption</span>,</span>
-<span>  householdDetailsDf <span class="op">=</span> <span class="va">householdDetails</span>,</span>
-<span>  nctListDf <span class="op">=</span> <span class="va">nctList</span>,</span>
-<span>  intakeThresholdsDf <span class="op">=</span> <span class="va">intakeThresholds</span>,</span>
-<span>  aggregationGroup <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"admin0Name"</span>, <span class="st">"admin1Name"</span><span class="op">)</span></span>
+<span></span>
+<span><span class="fu"><a href="reference/calculate_pre_and_post_lsff_summaries_afe.html">calculate_pre_and_post_lsff_summaries_afe</a></span><span class="op">(</span></span>
+<span>    householdConsumptionDf <span class="op">=</span> <span class="va">householdConsumption</span>,</span>
+<span>    householdDetailsDf <span class="op">=</span> <span class="va">householdDetails</span>,</span>
+<span>    nctListDf <span class="op">=</span> <span class="va">nctList</span>,</span>
+<span>    intakeThresholdsDf <span class="op">=</span> <span class="va">intakeThresholds</span>,</span>
+<span>    aggregationGroup <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"admin0Name"</span>, <span class="st">"admin1Name"</span><span class="op">)</span>,</span>
+<span>    fortifiableFoodItemsDf <span class="op">=</span> <span class="fu"><a href="reference/createFortifiableFoodItemsTable.html">createFortifiableFoodItemsTable</a></span><span class="op">(</span><span class="op">)</span>,</span>
+<span>    foodVehicleName <span class="op">=</span> <span class="st">"wheat flour"</span>,</span>
+<span>    fortificationLevels <span class="op">=</span> <span class="va">fortificationLevels</span>,</span>
+<span>    years <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">2021</span><span class="op">:</span><span class="fl">2024</span><span class="op">)</span>,</span>
+<span>    MNList <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"A"</span><span class="op">)</span></span>
 <span><span class="op">)</span></span></code></pre></div>
-</div>
-<div class="section level3">
-<h3 id="baseline-inadequacy-based-on-based-on-nutrient-density">Baseline Inadequacy Based on Based on nutrient density<a class="anchor" aria-label="anchor" href="#baseline-inadequacy-based-on-based-on-nutrient-density"></a>
-</h3>
 <div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="co"># Calculate baseline inadequacy for a micronutrient</span></span>
-<span><span class="fu"><a href="reference/calculateBaselineInadequacyCND.html">calculateBaselineInadequacyCND</a></span><span class="op">(</span></span>
-<span>  MNList <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"A"</span><span class="op">)</span>,</span>
+<code class="sourceCode R"><span><span class="fu"><a href="reference/calculate_pre_and_post_lsff_summaries_cnd.html">calculate_pre_and_post_lsff_summaries_cnd</a></span><span class="op">(</span></span>
 <span>  householdConsumptionDf <span class="op">=</span> <span class="va">householdConsumption</span>,</span>
 <span>  householdDetailsDf <span class="op">=</span> <span class="va">householdDetails</span>,</span>
 <span>  nctListDf <span class="op">=</span> <span class="va">nctList</span>,</span>
 <span>  intakeThresholdsDf <span class="op">=</span> <span class="va">intakeThresholds</span>,</span>
-<span>  aggregationGroup <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"admin0Name"</span>, <span class="st">"admin1Name"</span><span class="op">)</span></span>
-<span><span class="op">)</span></span></code></pre></div>
-</div>
-</div>
-<div class="section level2">
-<h2 id="food-vehicle-household-reach-example">Food Vehicle Household Reach Example<a class="anchor" aria-label="anchor" href="#food-vehicle-household-reach-example"></a>
-</h2>
-<p>This is how to calculate the household reach for a food vehicle. The function <code>calculateFoodVehicleHouseholdReach</code> calculates the household reach for a food vehicle. <!-- The function takes the following arguments:
-
-- `householdConsumptionDf`: A data frame containing the household consumption data. 
-- `householdDetailsDf`: A data frame containing the household details.
-- `fortifiableFoodItemsDf`: A data frame containing the fortifiable food items. 
-- `foodVehicleName`: The name of the food vehicle for which the household reach is to be calculated.
-- `aggregationGroup`: A character vector containing the names of the columns to be used for aggregation. The household reach will be calculated for each unique combination of the values in the columns specified in this vector. --></p>
-<div class="section level3">
-<h3 id="calculate-household-reach-for-a-food-vehicle">Calculate Household Reach for a Food Vehicle<a class="anchor" aria-label="anchor" href="#calculate-household-reach-for-a-food-vehicle"></a>
-</h3>
-<div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="co"># Calculate household reach for each food vehicle</span></span>
-<span><span class="fu"><a href="reference/calculateFoodVehicleHouseholdReach.html">calculateFoodVehicleHouseholdReach</a></span><span class="op">(</span></span>
-<span>  householdConsumptionDf <span class="op">=</span> <span class="va">householdConsumption</span>,</span>
-<span>  householdDetailsDf <span class="op">=</span> <span class="va">householdDetails</span>,</span>
-<span>  fortifiableFoodItemsDf <span class="op">=</span> <span class="va">fortifiable_food_items</span>,</span>
+<span>  aggregationGroup <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"admin0Name"</span>, <span class="st">"admin1Name"</span><span class="op">)</span>,</span>
+<span>  fortifiableFoodItemsDf <span class="op">=</span> <span class="fu"><a href="reference/createFortifiableFoodItemsTable.html">createFortifiableFoodItemsTable</a></span><span class="op">(</span><span class="op">)</span>,</span>
 <span>  foodVehicleName <span class="op">=</span> <span class="st">"wheat flour"</span>,</span>
-<span>  aggregationGroup <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"admin0Name"</span>, <span class="st">"admin1Name"</span><span class="op">)</span></span>
+<span>  fortificationLevelsDf <span class="op">=</span> <span class="va">fortificationLevels</span>,</span>
+<span>  years <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">2021</span><span class="op">:</span><span class="fl">2024</span><span class="op">)</span>,</span>
+<span>  MNList <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"A"</span><span class="op">)</span></span>
 <span><span class="op">)</span></span></code></pre></div>
 </div>
 </div>
