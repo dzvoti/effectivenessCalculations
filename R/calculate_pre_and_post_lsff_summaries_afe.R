@@ -253,14 +253,21 @@ calculate_pre_and_post_lsff_summaries_afe <- function(
         }
     }
 
+    # Calculate effective coverage
+    for (nutrient in MNList) {
+            for (year in years) {
+                enrichedNutrientSupply[paste0(nutrient, "_", year, "_effective_coverage")] <- ifelse(enrichedNutrientSupply[paste0(nutrient, "_base_supply_ear_inadequacy")] != enrichedNutrientSupply[paste0(nutrient, "_", year, "_base_and_lsff_ear_inadequacy")],1,0)
+        }
+    }
+
     # Create adequacy summaries
     inadequacySummarries <- enrichedNutrientSupply |>
         dplyr::left_join(householdDetailsDf) |>
         dplyr::group_by(dplyr::across(dplyr::all_of(aggregationGroup))) |>
         dplyr::summarize(
             dplyr::across(dplyr::ends_with("_ear_inadequacy"), ~ sum(.x, na.rm = TRUE), .names = "{.col}_count"),
-            dplyr::across(dplyr::ends_with("_ul_exceedance"), ~ sum(.x, na.rm = TRUE), .names = "{.col}_count")
-        ) |>
+            dplyr::across(dplyr::ends_with("_ul_exceedance"), ~ sum(.x, na.rm = TRUE), .names = "{.col}_count"),
+            dplyr::across(dplyr::ends_with("_effective_coverage"), ~ sum(.x, na.rm = TRUE), .names = "{.col}_count")) |>
         dplyr::left_join(initialSummaries) |>
         dplyr::left_join(medianNutrientSupplySummaries) |>
         dplyr::mutate(dplyr::across(dplyr::ends_with("_count"), ~ round((.x * 100 / householdsCount), 2), .names = "{.col}_perc"))
