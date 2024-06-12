@@ -126,21 +126,26 @@ calculate_pre_and_post_lsff_summaries_afe <- function(
         dplyr::summarize(fortification_vehicle_reach_hh_count = dplyr::n())
 
     # Mean and median fortification vehicle amounts consumed
-    fortificationVehicleAmountsConsumedAfe <- enrichedHouseholdConsumption |>
-        dplyr::filter(!is.na(food_vehicle_name)) |>
-        dplyr::group_by(householdId) |>
-        dplyr::summarize(median_fortification_vehicle_amountConsumedInGAfe = median(amountConsumedInGAfe, na.rm = TRUE), mean_fortification_vehicle_amountConsumedInGAfe = mean(amountConsumedInGAfe, na.rm = TRUE)) |>
-        dplyr::left_join(householdDetailsDf) |>
-        dplyr::group_by(dplyr::across(dplyr::all_of(aggregationGroup))) |>
-        dplyr::summarize(
-            median_fortification_vehicle_amountConsumedInGAfe = median(median_fortification_vehicle_amountConsumedInGAfe, na.rm = TRUE), mean_fortification_vehicle_amountConsumedInGAfe = mean(mean_fortification_vehicle_amountConsumedInGAfe, na.rm = TRUE)
-        )
+    # TODO: This calculation is repeated below. Check if it is necessary here.
+    # fortificationVehicleAmountsConsumedAfe <- enrichedHouseholdConsumption |>
+    #     dplyr::filter(!is.na(food_vehicle_name)) |>
+    #     dplyr::group_by(householdId) |>
+    #     dplyr::summarize(fortification_vehicle_amountConsumedInGAfe = sum(amountConsumedInGAfe, na.rm = TRUE
+    #         # median_fortification_vehicle_amountConsumedInGAfe = median(amountConsumedInGAfe, na.rm = TRUE), mean_fortification_vehicle_amountConsumedInGAfe = mean(amountConsumedInGAfe, na.rm = TRUE
+    #         )) |>
+    #     dplyr::left_join(householdDetailsDf) |>
+    #     dplyr::group_by(dplyr::across(dplyr::all_of(aggregationGroup))) |>
+    #     dplyr::summarize(
+    #         median_fortification_vehicle_amountConsumedInGAfe = median(fortification_vehicle_amountConsumedInGAfe, na.rm = TRUE), mean_fortification_vehicle_amountConsumedInGAfe = mean(fortification_vehicle_amountConsumedInGAfe, na.rm = TRUE)
+        # )
 
     # Average daily consumption per AFE
+    # TODO: Check if this calculation is correct when all foods are tagged as fortifiable. Currently it is not used in the final output.
     amountConsumedPerDayAfe <- enrichedHouseholdConsumption |>
         dplyr::group_by(householdId) |>
         dplyr::summarize(
-            dailyAmountConsumedPerAfeInG = sum(amountConsumedInG / 100 * afeFactor, na.rm = TRUE)
+            # dailyAmountConsumedPerAfeInG = sum(amountConsumedInG / 100 * afeFactor, na.rm = TRUE)
+            dailyAmountConsumedPerAfeInG = sum(amountConsumedInG / afeFactor, na.rm = TRUE)
         ) |>
         dplyr::left_join(householdDetailsDf) |>
         dplyr::group_by(dplyr::across(dplyr::all_of(aggregationGroup))) |>
@@ -159,23 +164,26 @@ calculate_pre_and_post_lsff_summaries_afe <- function(
         dplyr::left_join(householdDetailsDf) |>
         dplyr::group_by(dplyr::across(dplyr::all_of(aggregationGroup))) |>
         dplyr::summarize(
-            meanDailyamountConsumedContainingFortificantInG = mean(dailyAmountConsumedPerAfeInG, na.rm = TRUE),
-            medianDailyAmountConsumedContainingFortificantInG = median(dailyAmountConsumedPerAfeInG, na.rm = TRUE)
+            meanDailyamountConsumedContainingFortificantInGAfe = mean(dailyAmountConsumedPerAfeInG, na.rm = TRUE),
+            medianDailyAmountConsumedContainingFortificantInGAfe = median(dailyAmountConsumedPerAfeInG, na.rm = TRUE)
         )
 
     # Merge the summaries
     initialSummaries <- HHCountSummaries |>
         dplyr::left_join(fortificationVehicleReach) |>
-        dplyr::left_join(amountConsumedPerDayAfe) |>
-        dplyr::left_join(amountConsumedContainingFortificant) |>
-        dplyr::left_join(fortificationVehicleAmountsConsumedAfe)
+        # dplyr::left_join(amountConsumedPerDayAfe) |>
+        # dplyr::left_join(fortificationVehicleAmountsConsumedAfe) |>
+        dplyr::left_join(amountConsumedContainingFortificant)
 
     for (nutrient in MNList) {
-        enrichedHouseholdConsumption[paste0(nutrient, "_BaseSupply")] <- enrichedHouseholdConsumption[nutrient] / 100 * enrichedHouseholdConsumption["amountConsumedInG"]
+        # TODO: Check if units are the same for ear and ul. Create _BaseSupply_UL when Retinol and Folic Acid are available in the NctList.
+
+        enrichedHouseholdConsumption[paste0(nutrient, "_BaseSupply")] <- enrichedHouseholdConsumption[nutrient] / 100 * enrichedHouseholdConsumption["amountConsumedInG"] # TODO: This is verified as correct. Line 112 divided the nuttrient by AFE factor hence we use amountConsumedInG and not amountConsumedInGAfe here. It's quacky I know but it's correct.
 
         for (year in years) {
             # Calculate the supply of the nutrient with LSFF per food item
-            enrichedHouseholdConsumption[paste0(nutrient, "_", year, "_LSFFSupply")] <- enrichedHouseholdConsumption[paste0(nutrient, "_BaseSupply")] * yearAverageFortificationLevel(fortification_vehicle = foodVehicleName, Year = year, MN = nutrient) * enrichedHouseholdConsumption["fortifiable_portion"] / 100
+            # TODO: Check if this calculation is correct when all foods are tagged as fortifiable.
+            enrichedHouseholdConsumption[paste0(nutrient, "_", year, "_LSFFSupply")] <- enrichedHouseholdConsumption["amountConsumedInGAfe"] * yearAverageFortificationLevel(fortification_vehicle = foodVehicleName, Year = year, MN = nutrient) * enrichedHouseholdConsumption["fortifiable_portion"] / 100
         }
     }
 
@@ -187,6 +195,7 @@ calculate_pre_and_post_lsff_summaries_afe <- function(
             dplyr::across(dplyr::ends_with("_LSFFSupply"), ~ sum(.x, na.rm = TRUE), .names = "{.col}")
         )
 
+
     # Calculate mean and median nutrient supplies
     # TODO: These were checked and are consistent with the maps tool.
     medianNutrientSupplySummaries <- nutrientSupply |>
@@ -195,6 +204,7 @@ calculate_pre_and_post_lsff_summaries_afe <- function(
         dplyr::summarize(
             dplyr::across(dplyr::ends_with("_BaseSupply"), ~ round(mean(.x, na.rm = TRUE), 0), .names = "{.col}MeanSupply"),
             dplyr::across(dplyr::ends_with("_BaseSupply"), ~ round(median(.x, na.rm = TRUE), 0), .names = "{.col}MedianSupply")
+            # TOD0: Add the same for LSFFSupply
         )
 
     # Add _BaseSupply and _LSFFSupply for each nutrient and year combo
@@ -204,11 +214,13 @@ calculate_pre_and_post_lsff_summaries_afe <- function(
         }
     }
 
+
     # Remerge the household details
     enrichedNutrientSupply <- nutrientSupply |>
         dplyr::left_join(householdDetailsDf) |>
         dplyr::bind_cols(earThreshholds)
 
+    # TODO: Calculate the gap between the {ear}threshold and the nutrient supply for both basesuply and baseandlsffsupply and the next loop should then calculate the mean and media of the gap
     # Create adequacy columns for each Baseline and LSFF nutrient supply
     for (nutrient in MNList) {
         if (!is.na(effectivenessCalculations::getMnThresholds(intakeThresholdsDf, nutrient, "ear"))) {
@@ -224,6 +236,7 @@ calculate_pre_and_post_lsff_summaries_afe <- function(
     # Check if the intake is above the Upper Limit
     for (nutrient in MNList) {
         if (!is.na(effectivenessCalculations::getMnThresholds(intakeThresholdsDf, nutrient, "ul"))) {
+            #
             enrichedNutrientSupply[paste0(nutrient, "_base_ul_exceedance")] <- ifelse(enrichedNutrientSupply[paste0(nutrient, "_BaseSupply")] > effectivenessCalculations::getMnThresholds(intakeThresholdsDf, nutrient, "ul"), 1, 0)
         }
         for (year in years) {
@@ -238,12 +251,13 @@ calculate_pre_and_post_lsff_summaries_afe <- function(
         dplyr::left_join(householdDetailsDf) |>
         dplyr::group_by(dplyr::across(dplyr::all_of(aggregationGroup))) |>
         dplyr::summarize(
-            dplyr::across(dplyr::ends_with("_base_supply_ear_inadequacy"), ~ sum(.x, na.rm = TRUE), .names = "{.col}_count"),
-            dplyr::across(dplyr::ends_with("_base_ul_exceedance"), ~ sum(.x, na.rm = TRUE), .names = "{.col}_count")
+            dplyr::across(dplyr::ends_with("_ear_inadequacy"), ~ sum(.x, na.rm = TRUE), .names = "{.col}_count"),
+            dplyr::across(dplyr::ends_with("_ul_exceedance"), ~ sum(.x, na.rm = TRUE), .names = "{.col}_count")
         ) |>
         dplyr::left_join(initialSummaries) |>
         dplyr::mutate(dplyr::across(dplyr::ends_with("_count"), ~ round((.x * 100 / householdsCount), 2), .names = "{.col}_perc"))
 
+    
     # Get the column order for the data
     columnOrder <- sort(names(inadequacySummarries))
 
