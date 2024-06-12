@@ -39,7 +39,7 @@ calculate_pre_and_post_lsff_summaries_afe <- function(
     aggregationGroup = c("admin0Name", "admin1Name"),
     fortifiableFoodItemsDf = createFortifiableFoodItemsTable(),
     foodVehicleName = "wheat flour",
-    fortificationLevels = fortificationLevelsDf,
+    fortificationLevelsDf = fortificationLevels,
     years = c(2021:2024),
     MNList = "A") {
     # Define required columns
@@ -258,6 +258,7 @@ calculate_pre_and_post_lsff_summaries_afe <- function(
             dplyr::across(dplyr::ends_with("_ul_exceedance"), ~ sum(.x, na.rm = TRUE), .names = "{.col}_count")
         ) |>
         dplyr::left_join(initialSummaries) |>
+        dplyr::left_join(medianNutrientSupplySummaries) |>
         dplyr::mutate(dplyr::across(dplyr::ends_with("_count"), ~ round((.x * 100 / householdsCount), 2), .names = "{.col}_perc"))
 
 
