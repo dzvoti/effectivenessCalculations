@@ -1,11 +1,15 @@
 AFE
 CMD
 CND
+CUL
 DT
 FCT
+Fortifiable
+LSFF
 Micronutrient
 NCT
 NCTs
+Pre
 afeFactor
 amountConsumedInG
 csv
@@ -24,6 +28,7 @@ micronutrientId
 micronutrients
 nctList
 param
+pre
 subnational
 ul
 unitAdequacy
