@@ -40,15 +40,31 @@ Inadequacy Summaries.
 ``` r
 library(effectivenessCalculations)
 
- calculate_pre_and_post_lsff_summaries_afe(
-     householdConsumptionDf = householdConsumption,
-     householdDetailsDf = householdDetails,
-     nctListDf = nctList,
-     intakeThresholdsDf = intakeThresholds,
-     aggregationGroup = c("admin0Name", "admin1Name"),
-     fortifiableFoodItemsDf = createFortifiableFoodItemsTable(),
-     foodVehicleName = "wheat flour",
-     years = c(2021:2024),
-     MNList = c("A")
- )
+calculate_pre_and_post_lsff_summaries_afe(
+    householdConsumptionDf = householdConsumption,
+    householdDetailsDf = householdDetails,
+    nctListDf = nctList,
+    intakeThresholdsDf = intakeThresholds,
+    aggregationGroup = c("admin0Name", "admin1Name"),
+    fortifiableFoodItemsDf = createFortifiableFoodItemsTable(),
+    foodVehicleName = "wheat flour",
+    fortificationLevels = fortificationLevels,
+    years = c(2021:2024),
+    MNList = c("A")
+)
+```
+
+``` r
+calculate_pre_and_post_lsff_summaries_cnd(
+  householdConsumptionDf = householdConsumption,
+  householdDetailsDf = householdDetails,
+  nctListDf = nctList,
+  intakeThresholdsDf = intakeThresholds,
+  aggregationGroup = c("admin0Name", "admin1Name"),
+  fortifiableFoodItemsDf = createFortifiableFoodItemsTable(),
+  foodVehicleName = "wheat flour",
+  fortificationLevelsDf = fortificationLevels,
+  years = c(2021:2024),
+  MNList = c("A")
+)
 ```
