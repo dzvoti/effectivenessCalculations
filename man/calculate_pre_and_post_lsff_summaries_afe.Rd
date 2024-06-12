@@ -12,6 +12,7 @@ calculate_pre_and_post_lsff_summaries_afe(
   aggregationGroup = c("admin0Name", "admin1Name"),
   fortifiableFoodItemsDf = createFortifiableFoodItemsTable(),
   foodVehicleName = "wheat flour",
+  fortificationLevels = fortificationLevelsDf,
   years = c(2021:2024),
   MNList = "A"
 )
@@ -19,17 +20,19 @@ calculate_pre_and_post_lsff_summaries_afe(
 \arguments{
 \item{householdConsumptionDf}{A dataframe containing household consumption data. Must contain columns: "householdId", "amountConsumedInG".}
 
-\item{householdDetailsDf}{A dataframe containing household details. Must contain columns: "householdId", "memberCount".}
+\item{householdDetailsDf}{A dataframe containing household details. Must contain columns: "householdId", "memberCount","afeFactor".}
 
 \item{nctListDf}{A dataframe containing nutrient composition tables. Must contain column: "nutrient".}
 
-\item{intakeThresholdsDf}{A dataframe containing intake thresholds for nutrients. Must contain columns: "nutrient", "ear".}
+\item{intakeThresholdsDf}{A dataframe containing intake thresholds for nutrients. Must contain columns: "nutrient", "ear", "ul".}
 
 \item{aggregationGroup}{A character vector of administrative groups to aggregate the data. Must not be empty. Defaults to c("admin0Name", "admin1Name").}
 
 \item{fortifiableFoodItemsDf}{A dataframe containing fortifiable food items. Generated using the function \code{createFortifiableFoodItemsTable()}.}
 
 \item{foodVehicleName}{A character string specifying the name of the food vehicle for fortification. Defaults to "wheat flour".}
+
+\item{fortificationLevels}{A dataframe containing the average fortification levels for different nutrients and years.}
 
 \item{years}{A numeric vector specifying the years for which LSFF is analyzed. Defaults to 2021:2024.}
 
@@ -43,7 +46,7 @@ This function calculates summaries of nutrient inadequacy before and after large
 }
 \examples{
 \dontrun{
-calculate_pre_and_post_lsff_summaries(
+calculate_pre_and_post_lsff_summaries_afe(
     householdConsumptionDf = householdConsumption,
     householdDetailsDf = householdDetails,
     nctListDf = nctList,
@@ -51,6 +54,7 @@ calculate_pre_and_post_lsff_summaries(
     aggregationGroup = c("admin0Name", "admin1Name"),
     fortifiableFoodItemsDf = createFortifiableFoodItemsTable(),
     foodVehicleName = "wheat flour",
+    fortificationLevels = fortificationLevels,
     years = c(2021:2024),
     MNList = c("A", "Ca")
 )

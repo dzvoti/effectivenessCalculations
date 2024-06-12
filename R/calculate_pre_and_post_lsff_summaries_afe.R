@@ -3,12 +3,13 @@
 #' This function calculates summaries of nutrient inadequacy before and after large-scale food fortification (LSFF) for different administrative groups using the Adult Female Equivalent (AFE) Method.
 #'
 #' @param householdConsumptionDf A dataframe containing household consumption data. Must contain columns: "householdId", "amountConsumedInG".
-#' @param householdDetailsDf A dataframe containing household details. Must contain columns: "householdId", "memberCount".
+#' @param householdDetailsDf A dataframe containing household details. Must contain columns: "householdId", "memberCount","afeFactor".
 #' @param nctListDf A dataframe containing nutrient composition tables. Must contain column: "nutrient".
-#' @param intakeThresholdsDf A dataframe containing intake thresholds for nutrients. Must contain columns: "nutrient", "ear".
+#' @param intakeThresholdsDf A dataframe containing intake thresholds for nutrients. Must contain columns: "nutrient", "ear", "ul".
 #' @param aggregationGroup A character vector of administrative groups to aggregate the data. Must not be empty. Defaults to c("admin0Name", "admin1Name").
 #' @param fortifiableFoodItemsDf A dataframe containing fortifiable food items. Generated using the function `createFortifiableFoodItemsTable()`.
 #' @param foodVehicleName A character string specifying the name of the food vehicle for fortification. Defaults to "wheat flour".
+#' @param fortificationLevels A dataframe containing the average fortification levels for different nutrients and years.
 #' @param years A numeric vector specifying the years for which LSFF is analyzed. Defaults to 2021:2024.
 #' @param MNList A character vector of nutrients to be included in the analysis. Defaults to "A". Must not be empty.
 #'
@@ -17,7 +18,7 @@
 #'
 #' @examples
 #' \dontrun{
-#' calculate_pre_and_post_lsff_summaries(
+#' calculate_pre_and_post_lsff_summaries_afe(
 #'     householdConsumptionDf = householdConsumption,
 #'     householdDetailsDf = householdDetails,
 #'     nctListDf = nctList,
@@ -25,6 +26,7 @@
 #'     aggregationGroup = c("admin0Name", "admin1Name"),
 #'     fortifiableFoodItemsDf = createFortifiableFoodItemsTable(),
 #'     foodVehicleName = "wheat flour",
+#'     fortificationLevels = fortificationLevels,
 #'     years = c(2021:2024),
 #'     MNList = c("A", "Ca")
 #' )
@@ -37,6 +39,7 @@ calculate_pre_and_post_lsff_summaries_afe <- function(
     aggregationGroup = c("admin0Name", "admin1Name"),
     fortifiableFoodItemsDf = createFortifiableFoodItemsTable(),
     foodVehicleName = "wheat flour",
+    fortificationLevels = fortificationLevelsDf,
     years = c(2021:2024),
     MNList = "A") {
     # Define required columns
@@ -137,7 +140,7 @@ calculate_pre_and_post_lsff_summaries_afe <- function(
     #     dplyr::group_by(dplyr::across(dplyr::all_of(aggregationGroup))) |>
     #     dplyr::summarize(
     #         median_fortification_vehicle_amountConsumedInGAfe = median(fortification_vehicle_amountConsumedInGAfe, na.rm = TRUE), mean_fortification_vehicle_amountConsumedInGAfe = mean(fortification_vehicle_amountConsumedInGAfe, na.rm = TRUE)
-        # )
+    # )
 
     # Average daily consumption per AFE
     # TODO: Check if this calculation is correct when all foods are tagged as fortifiable. Currently it is not used in the final output.
@@ -183,7 +186,7 @@ calculate_pre_and_post_lsff_summaries_afe <- function(
         for (year in years) {
             # Calculate the supply of the nutrient with LSFF per food item
             # TODO: Check if this calculation is correct when all foods are tagged as fortifiable.
-            enrichedHouseholdConsumption[paste0(nutrient, "_", year, "_LSFFSupply")] <- enrichedHouseholdConsumption["amountConsumedInGAfe"] * yearAverageFortificationLevel(fortification_vehicle = foodVehicleName, Year = year, MN = nutrient) * enrichedHouseholdConsumption["fortifiable_portion"] / 100
+            enrichedHouseholdConsumption[paste0(nutrient, "_", year, "_LSFFSupply")] <- enrichedHouseholdConsumption["amountConsumedInGAfe"] * yearAverageFortificationLevel(fortification_vehicle = foodVehicleName, Year = year, MN = nutrient, fortificationLevels = fortificationLevelsDf) * enrichedHouseholdConsumption["fortifiable_portion"] / 100
         }
     }
 
@@ -257,7 +260,7 @@ calculate_pre_and_post_lsff_summaries_afe <- function(
         dplyr::left_join(initialSummaries) |>
         dplyr::mutate(dplyr::across(dplyr::ends_with("_count"), ~ round((.x * 100 / householdsCount), 2), .names = "{.col}_perc"))
 
-    
+
     # Get the column order for the data
     columnOrder <- sort(names(inadequacySummarries))
 
