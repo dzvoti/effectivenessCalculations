@@ -9,7 +9,7 @@
 #' @param aggregationGroup A character vector of administrative groups to aggregate the data. Must not be empty. Defaults to c("admin0Name", "admin1Name").
 #' @param fortifiableFoodItemsDf A dataframe containing fortifiable food items. Generated using the function `createFortifiableFoodItemsTable()`.
 #' @param foodVehicleName A character string specifying the name of the food vehicle for fortification. Defaults to "wheat flour".
-#' @param fortificationLevels A dataframe containing the average fortification levels for different nutrients and years.
+#' @param fortificationLevelsDf A dataframe containing the average fortification levels for different nutrients and years.
 #' @param years A numeric vector specifying the years for which LSFF is analyzed. Defaults to 2021:2024.
 #' @param MNList A character vector of nutrients to be included in the analysis. Defaults to "A". Must not be empty.
 #'
@@ -255,8 +255,8 @@ calculate_pre_and_post_lsff_summaries_afe <- function(
 
     # Calculate effective coverage
     for (nutrient in MNList) {
-            for (year in years) {
-                enrichedNutrientSupply[paste0(nutrient, "_", year, "_effective_coverage")] <- ifelse(enrichedNutrientSupply[paste0(nutrient, "_base_supply_ear_inadequacy")] != enrichedNutrientSupply[paste0(nutrient, "_", year, "_base_and_lsff_ear_inadequacy")],1,0)
+        for (year in years) {
+            enrichedNutrientSupply[paste0(nutrient, "_", year, "_effective_coverage")] <- ifelse(enrichedNutrientSupply[paste0(nutrient, "_base_supply_ear_inadequacy")] != enrichedNutrientSupply[paste0(nutrient, "_", year, "_base_and_lsff_ear_inadequacy")], 1, 0)
         }
     }
 
@@ -267,7 +267,8 @@ calculate_pre_and_post_lsff_summaries_afe <- function(
         dplyr::summarize(
             dplyr::across(dplyr::ends_with("_ear_inadequacy"), ~ sum(.x, na.rm = TRUE), .names = "{.col}_count"),
             dplyr::across(dplyr::ends_with("_ul_exceedance"), ~ sum(.x, na.rm = TRUE), .names = "{.col}_count"),
-            dplyr::across(dplyr::ends_with("_effective_coverage"), ~ sum(.x, na.rm = TRUE), .names = "{.col}_count")) |>
+            dplyr::across(dplyr::ends_with("_effective_coverage"), ~ sum(.x, na.rm = TRUE), .names = "{.col}_count")
+        ) |>
         dplyr::left_join(initialSummaries) |>
         dplyr::left_join(medianNutrientSupplySummaries) |>
         dplyr::mutate(dplyr::across(dplyr::ends_with("_count"), ~ round((.x * 100 / householdsCount), 2), .names = "{.col}_perc"))
