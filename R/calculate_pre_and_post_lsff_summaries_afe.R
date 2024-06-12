@@ -80,6 +80,10 @@ calculate_pre_and_post_lsff_summaries_afe <- function(
         stop(paste("intakeThresholdsDf must contain the following columns:", paste(requiredIntakeCols, collapse = ", ")))
     }
 
+    # Mutate fortificationLevel values to numeric
+    fortificationLevelsDf <- fortificationLevelsDf |>
+        dplyr::mutate_at(c("perc_fortifiable", "perc_fortified", "perc_average_fortification_level", MNList), as.numeric)
+
     # Use the createMasterNct function to create a master NCT
     masterNCT <- effectivenessCalculations::createMasterNct(nctList)
 

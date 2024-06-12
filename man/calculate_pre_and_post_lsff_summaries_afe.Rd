@@ -12,7 +12,7 @@ calculate_pre_and_post_lsff_summaries_afe(
   aggregationGroup = c("admin0Name", "admin1Name"),
   fortifiableFoodItemsDf = createFortifiableFoodItemsTable(),
   foodVehicleName = "wheat flour",
-  fortificationLevels = fortificationLevelsDf,
+  fortificationLevelsDf = fortificationLevels,
   years = c(2021:2024),
   MNList = "A"
 )
@@ -32,11 +32,11 @@ calculate_pre_and_post_lsff_summaries_afe(
 
 \item{foodVehicleName}{A character string specifying the name of the food vehicle for fortification. Defaults to "wheat flour".}
 
-\item{fortificationLevels}{A dataframe containing the average fortification levels for different nutrients and years.}
-
 \item{years}{A numeric vector specifying the years for which LSFF is analyzed. Defaults to 2021:2024.}
 
 \item{MNList}{A character vector of nutrients to be included in the analysis. Defaults to "A". Must not be empty.}
+
+\item{fortificationLevels}{A dataframe containing the average fortification levels for different nutrients and years.}
 }
 \value{
 A dataframe with the summaries of nutrient inadequacy for the specified administrative groups before and after LSFF.
