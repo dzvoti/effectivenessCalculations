@@ -56,8 +56,17 @@ createFortifiableFoodItemsTable <- function(
             fortifiable_portion = dplyr::case_when(
                 food_genus_id == "F0020.06" & food_vehicle_id == 1 ~ 80,
                 food_genus_id == "23140.03.02" & food_vehicle_id == 1 ~ 0,
-                "bread" %in% food_genus_name & food_vehicle_id == 1 ~ 75, # Katie email. 08-May-2024
-                food_genus_name == "buns" & food_vehicle_id == 1 ~ 33,
+                food_genus_id == "F0020.01" & food_vehicle_id == 1 ~ 75, # Bread
+                food_genus_id == "F0020.02" & food_vehicle_id == 1 ~ 75, # Bread
+                food_genus_id == "F0022.02" & food_vehicle_id == 1 ~ 33, # Buns, scones
+                food_genus_id == "F0022.01" & food_vehicle_id == 1 ~ 33, # Buns, scones
+                food_genus_id == "F0022.05" & food_vehicle_id == 1 ~ 13, # Samosa (vendor) from Tanzania recipe
+                food_genus_id == "F0022.06" & food_vehicle_id == 1 ~ 13, # Samosa (vendor) from Tanzania recipe
+                food_genus_id == "23110.02" & food_vehicle_id == 1 ~ 100, # Wheat flour
+                food_genus_id == "23110.01" & food_vehicle_id == 1 ~ 100, # Wheat flour
+                food_genus_id == "F0022.04" & food_vehicle_id == 1 ~ 41, # Mandazi, doughnut (vendor)
+                # "bread" %in% food_genus_name & food_vehicle_id == 1 ~ 75, # Katie email. 08-May-2024
+                # food_genus_name == "buns" & food_vehicle_id == 1 ~ 33,
                 TRUE ~ fortifiable_portion
             )
         )
