@@ -83,7 +83,7 @@ calculate_pre_and_post_lsff_summaries_cnd <- function(
     # Mutate fortificationLevel values to numeric
     fortificationLevelsDf <- fortificationLevelsDf |>
         dplyr::mutate_at(c("perc_fortifiable", "perc_fortified", "perc_average_fortification_level", MNList), as.numeric)
-    
+
     # Use the createMasterNct function to create a master NCT
     masterNCT <- effectivenessCalculations::createMasterNct(nctList)
 
@@ -124,8 +124,9 @@ calculate_pre_and_post_lsff_summaries_cnd <- function(
 
     # Mean and median fortification vehicle amounts consumed
     amountConsumedContainingFortificant <- enrichedHouseholdConsumption |>
-        dplyr::group_by(householdId) |>
         dplyr::filter(!is.na(food_vehicle_name)) |>
+        dplyr::filter(amountConsumedInG > 0) |>
+                dplyr::group_by(householdId) |>
         dplyr::summarize(
             dailyAmountConsumedPerAfe = sum(amountConsumedInG / afeFactor, na.rm = TRUE)
         ) |>
@@ -160,8 +161,8 @@ calculate_pre_and_post_lsff_summaries_cnd <- function(
         # dplyr::group_by(householdId) |>
         dplyr::mutate(dplyr::across(dplyr::all_of(c(MNList, "Energy")), ~ (.x / 100 * amountConsumedInG), .names = "{.col}_BaseSupply")) |>
         dplyr::bind_cols(cndThreshholds)
-    
-    # Calculate median and mean supply of MNList balanced by Afe 
+
+    # Calculate median and mean supply of MNList balanced by Afe
 
 
 
@@ -226,7 +227,7 @@ calculate_pre_and_post_lsff_summaries_cnd <- function(
         for (year in years) {
             enrichedHouseholdConsumption[paste0(nutrient, "_", year, "_effective_coverage")] <- ifelse(enrichedHouseholdConsumption[paste0(nutrient, "_cnd_inadequacy")] != enrichedHouseholdConsumption[paste0(nutrient, "_", year, "_BaseAndLSFF_cnd_inadequacy")], 1, 0)
         }
-    } 
+    }
 
 
     # Summarize prevalence of inadequacy

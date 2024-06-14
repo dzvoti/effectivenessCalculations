@@ -163,8 +163,9 @@ calculate_pre_and_post_lsff_summaries_afe <- function(
 
     # Amount consumed containing fortificant
     amountConsumedContainingFortificant <- enrichedHouseholdConsumption |>
-        dplyr::group_by(householdId) |>
         dplyr::filter(!is.na(food_vehicle_name)) |>
+        dplyr::filter(amountConsumedInG > 0) |>
+        dplyr::group_by(householdId) |>
         dplyr::summarize(
             dailyAmountConsumedPerAfeInG = sum(amountConsumedInG / afeFactor, na.rm = TRUE)
         ) |>
