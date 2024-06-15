@@ -184,14 +184,34 @@ calculate_pre_and_post_lsff_summaries_afe <- function(
         dplyr::left_join(amountConsumedContainingFortificant)
 
     for (nutrient in MNList) {
-        # TODO: Check if units are the same for ear and ul. Create _BaseSupply_UL when Retinol and Folic Acid are available in the NctList.
+        if (grepl("mg", effectivenessCalculations::getMnThresholdUnits(intakeThresholdsDf, nutrient, "unitAdequacy"))) {
+            enrichedHouseholdConsumption[paste0(nutrient, "_BaseSupply")] <- enrichedHouseholdConsumption[nutrient] / 100 * enrichedHouseholdConsumption["amountConsumedInG"] # TODO: This is verified as correct. Line 112 divided the nuttrient by AFE factor hence we use amountConsumedInG and not amountConsumedInGAfe here. It's quacky I know but it's correct.
 
-        enrichedHouseholdConsumption[paste0(nutrient, "_BaseSupply")] <- enrichedHouseholdConsumption[nutrient] / 100 * enrichedHouseholdConsumption["amountConsumedInG"] # TODO: This is verified as correct. Line 112 divided the nuttrient by AFE factor hence we use amountConsumedInG and not amountConsumedInGAfe here. It's quacky I know but it's correct.
+            for (year in years) {
+                # Calculate the supply of the nutrient with LSFF per food item
+                # TODO: Check if this calculation is correct when all foods are tagged as fortifiable.
+                enrichedHouseholdConsumption[paste0(nutrient, "_", year, "_LSFFSupply")] <- enrichedHouseholdConsumption["amountConsumedInGAfe"] * (yearAverageFortificationLevel(fortification_vehicle = foodVehicleName, Year = year, MN = nutrient, fortificationLevels = fortificationLevelsDf) / 1000) * (enrichedHouseholdConsumption["fortifiable_portion"] / 100)
+            }
+        } else if (grepl("mcg", effectivenessCalculations::getMnThresholdUnits(intakeThresholdsDf, nutrient, "unitAdequacy"))) {
+            if (nutrient != "B9") {
+                enrichedHouseholdConsumption[paste0(nutrient, "_BaseSupply")] <- enrichedHouseholdConsumption[nutrient] / 100 * enrichedHouseholdConsumption["amountConsumedInG"]
+                # TODO: This is verified as correct. Line 112 divided the nuttrient by AFE factor hence we use amountConsumedInG and not amountConsumedInGAfe here. It's quacky I know but it's correct.
 
-        for (year in years) {
-            # Calculate the supply of the nutrient with LSFF per food item
-            # TODO: Check if this calculation is correct when all foods are tagged as fortifiable.
-            enrichedHouseholdConsumption[paste0(nutrient, "_", year, "_LSFFSupply")] <- enrichedHouseholdConsumption["amountConsumedInGAfe"] * yearAverageFortificationLevel(fortification_vehicle = foodVehicleName, Year = year, MN = nutrient, fortificationLevels = fortificationLevelsDf) * enrichedHouseholdConsumption["fortifiable_portion"] / 100
+                for (year in years) {
+                    # Calculate the supply of the nutrient with LSFF per food item
+                    # TODO: Check if this calculation is correct when all foods are tagged as fortifiable.
+                    enrichedHouseholdConsumption[paste0(nutrient, "_", year, "_LSFFSupply")] <- enrichedHouseholdConsumption["amountConsumedInGAfe"] * yearAverageFortificationLevel(fortification_vehicle = foodVehicleName, Year = year, MN = nutrient, fortificationLevels = fortificationLevelsDf) * (enrichedHouseholdConsumption["fortifiable_portion"] / 100)
+                }
+            } else {
+                enrichedHouseholdConsumption[paste0(nutrient, "_BaseSupply")] <- enrichedHouseholdConsumption[nutrient] / 100 * enrichedHouseholdConsumption["amountConsumedInG"]
+                # TODO: This is verified as correct. Line 112 divided the nuttrient by AFE factor hence we use amountConsumedInG and not amountConsumedInGAfe here. It's quacky I know but it's correct.
+
+                for (year in years) {
+                    # Calculate the supply of the nutrient with LSFF per food item
+                    # TODO: Check if this calculation is correct when all foods are tagged as fortifiable.
+                    enrichedHouseholdConsumption[paste0(nutrient, "_", year, "_LSFFSupply")] <- enrichedHouseholdConsumption["amountConsumedInGAfe"] * (yearAverageFortificationLevel(fortification_vehicle = foodVehicleName, Year = year, MN = nutrient, fortificationLevels = fortificationLevelsDf) * 1.7) * (enrichedHouseholdConsumption["fortifiable_portion"] / 100)
+                }
+            }
         }
     }
 
