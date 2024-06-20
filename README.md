@@ -9,7 +9,7 @@
 
 ![GitHub R package version](https://img.shields.io/github/r-package/v/dzvoti/effectivenessCalculations)
 [![Life
-cycle](https://img.shields.io/badge/lifecycle-experimental-orange.svg)](https://lifecycle.r-lib.org/articles/stages.html)
+cycle](https://lifecycle.r-lib.org/articles/figures/lifecycle-stable.svg)](https://lifecycle.r-lib.org/articles/stages.html)
 [![R-CMD-check](https://github.com/dzvoti/effectivenessCalculations/actions/workflows/R-CMD-check.yaml/badge.svg)](https://github.com/dzvoti/effectivenessCalculations/actions/workflows/R-CMD-check.yaml)
 <!-- badges: end -->
 
