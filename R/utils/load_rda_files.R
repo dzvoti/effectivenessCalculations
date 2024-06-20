@@ -13,8 +13,7 @@
 #' load_rda_files("your/custom/path")
 #' }
 #'
-#' @export
-#' @export
+#' @keywords internal
 load_rda_files <- function(dir = "data/sd123") {
     # List .rda files in the specified directory
     rdaFiles <- list.files(dir, pattern = "\\.rda$", full.names = TRUE)
