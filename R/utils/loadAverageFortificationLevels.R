@@ -12,6 +12,7 @@
 #' \dontrun{
 #' avgFortificationLevel <- yearAverageFortificationLevel("wheat flour", 2024, "A")
 #' }
+#' @export
 #' @keywords internal
 yearAverageFortificationLevel <- function(fortification_vehicle, Year, MN, fortificationLevels) {
     yearAverageFortificationLevel <- fortificationLevels[fortificationLevels$Year == Year, MN][[1]]
