@@ -7,8 +7,7 @@
 <!-- [![CRAN status]()]()
 [![License](https://github.com/dzvoti/effectivenessCalculations?tab=MIT-2-ov-file)](https://github.com/dzvoti/effectivenessCalculations?tab=MIT-2-ov-file) -->
 
-[![Version](https://img.shields.io/badge/version-v0.2.0-blue)](https://img.shields.io/badge/version-v0.2.0-blue)
-[![GitHub version](https://badge.fury.io/gh/dzvoti%2FeffectivenessCalculations.svg)](https://badge.fury.io/gh/dzvoti%2Feffectivenesscalculations)
+![GitHub R package version](https://img.shields.io/github/r-package/v/dzvoti/effectivenessCalculations)
 [![Life
 cycle](https://img.shields.io/badge/lifecycle-experimental-orange.svg)](https://lifecycle.r-lib.org/articles/stages.html)
 [![R-CMD-check](https://github.com/dzvoti/effectivenessCalculations/actions/workflows/R-CMD-check.yaml/badge.svg)](https://github.com/dzvoti/effectivenessCalculations/actions/workflows/R-CMD-check.yaml)
