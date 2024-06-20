@@ -4,13 +4,12 @@
 # effectivenessCalculations
 
 <!-- badges: start -->
-<!-- [![CRAN status]()]()
-[![License](https://github.com/dzvoti/effectivenessCalculations?tab=MIT-2-ov-file)](https://github.com/dzvoti/effectivenessCalculations?tab=MIT-2-ov-file) -->
 
-![GitHub R package version](https://img.shields.io/github/r-package/v/dzvoti/effectivenessCalculations)
-[![Life
-cycle](https://lifecycle.r-lib.org/articles/figures/lifecycle-stable.svg)](https://lifecycle.r-lib.org/articles/stages.html)
 [![R-CMD-check](https://github.com/dzvoti/effectivenessCalculations/actions/workflows/R-CMD-check.yaml/badge.svg)](https://github.com/dzvoti/effectivenessCalculations/actions/workflows/R-CMD-check.yaml)
+[![Lifecycle:
+stable](https://img.shields.io/badge/lifecycle-stable-brightgreen.svg)](https://lifecycle.r-lib.org/articles/stages.html#stable)
+![GitHub R package
+version](https://img.shields.io/github/r-package/v/dzvoti/effectivenessCalculations)
 <!-- badges: end -->
 
 The goal of effectivenessCalculations is to provide functions for
