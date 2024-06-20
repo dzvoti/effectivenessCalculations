@@ -12,6 +12,7 @@
 #' # Load .rda files from a custom directory
 #' load_rda_files("your/custom/path")
 #' }
+#'
 #' @export
 #' @keywords internal
 load_rda_files <- function(dir = "data/sd123") {
