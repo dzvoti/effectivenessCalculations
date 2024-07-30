@@ -19,7 +19,7 @@
 <![endif]-->
 </head>
 <body data-spy="scroll" data-target="#toc">
-    
+
 
     <div class="container template-home">
       <header><div class="navbar navbar-default navbar-fixed-top" role="navigation">
@@ -33,7 +33,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="index.html">effectivenessCalculations</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">1.2.0</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">1.3.0</span>
       </span>
     </div>
 
@@ -51,7 +51,7 @@
 </div>
 <!--/.navbar -->
 
-      
+
 
       </header><div class="row">
   <div class="contents col-md-9">
@@ -59,8 +59,6 @@
 <div class="page-header"><h1 id="effectivenesscalculations">effectivenessCalculations<a class="anchor" aria-label="anchor" href="#effectivenesscalculations"></a>
 </h1></div>
 <!-- badges: start -->
-<!-- [![CRAN status]()]()
-[![License](https://github.com/dzvoti/effectivenessCalculations?tab=MIT-2-ov-file)](https://github.com/dzvoti/effectivenessCalculations?tab=MIT-2-ov-file) -->
 
 <p>The goal of effectivenessCalculations is to provide functions for calculating various metrics related to nutritional effectiveness, such as baseline inadequacy and household reach for food vehicles.</p>
 <div class="section level2">
@@ -77,8 +75,29 @@
 <div class="section level3">
 <h3 id="calculate-pre-and-post-fortification-intake-supplies-fortification-vehicle-reach-and-inadequacy-summaries">Calculate pre and post fortification intake supplies, fortification vehicle reach and Inadequacy Summaries<a class="anchor" aria-label="anchor" href="#calculate-pre-and-post-fortification-intake-supplies-fortification-vehicle-reach-and-inadequacy-summaries"></a>
 </h3>
-<p>This is how to calculate the pre and post fortification intake supplies, fortification vehicle reach and Inadequacy Summaries. The function <code>calculate_pre_and_post_lsff_summaries_afe</code> calculates the pre and post fortification intake supplies, fortification vehicle reach and Inadequacy Summaries.</p>
+<p>This is how to calculate the pre and post fortification intake supplies, fortification vehicle reach and Inadequacy Summaries. The function <code>calculate_pre_and_post_fortification_summaries</code> calculates the pre and post fortification intake supplies, fortification vehicle reach and Inadequacy Summaries for chosen fortification method and metric.</p>
 <div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="fu"><a href="reference/calculate_pre_and_post_fortification_summaries.html">calculate_pre_and_post_fortification_summaries</a></span><span class="op">(</span></span>
+<span>    householdConsumptionDf <span class="op">=</span> <span class="va">householdConsumption</span>,</span>
+<span>    householdDetailsDf <span class="op">=</span> <span class="va">householdDetails</span>,</span>
+<span>    nctListDf <span class="op">=</span> <span class="va">nctList</span>,</span>
+<span>    intakeThresholdsDf <span class="op">=</span> <span class="va">intakeThresholds</span>,</span>
+<span>    aggregationGroup <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"admin0Name"</span>, <span class="st">"admin1Name"</span><span class="op">)</span>,</span>
+<span>    fortifiableFoodItemsDf <span class="op">=</span> <span class="fu"><a href="reference/createFortifiableFoodItemsTable.html">createFortifiableFoodItemsTable</a></span><span class="op">(</span><span class="op">)</span>,</span>
+<span>    foodVehicleName <span class="op">=</span> <span class="st">"wheat flour"</span>,</span>
+<span>    fortificationLevelsDf <span class="op">=</span> <span class="va">fortificationLevels</span>,</span>
+<span>    years <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">2021</span><span class="op">:</span><span class="fl">2024</span><span class="op">)</span>,</span>
+<span>    MNList <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"A"</span>, <span class="st">"Ca"</span><span class="op">)</span>,</span>
+<span>    metric <span class="op">=</span> <span class="st">"AFE"</span>,</span>
+<span>    method <span class="op">=</span> <span class="st">"LSFF"</span></span>
+<span><span class="op">)</span></span></code></pre></div>
+</div>
+</div>
+<div class="section level2">
+<h2 id="deprecated-examples">Deprecated Examples<a class="anchor" aria-label="anchor" href="#deprecated-examples"></a>
+</h2>
+<p>These examples are deprecated and will be removed in future versions of the package. Please use the new functions above.</p>
+<div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va">effectivenessCalculations</span><span class="op">)</span></span>
 <span></span>
 <span><span class="fu"><a href="reference/calculate_pre_and_post_lsff_summaries_afe.html">calculate_pre_and_post_lsff_summaries_afe</a></span><span class="op">(</span></span>
@@ -93,7 +112,7 @@
 <span>    years <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">2021</span><span class="op">:</span><span class="fl">2024</span><span class="op">)</span>,</span>
 <span>    MNList <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"A"</span><span class="op">)</span></span>
 <span><span class="op">)</span></span></code></pre></div>
-<div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="reference/calculate_pre_and_post_lsff_summaries_cnd.html">calculate_pre_and_post_lsff_summaries_cnd</a></span><span class="op">(</span></span>
 <span>  householdConsumptionDf <span class="op">=</span> <span class="va">householdConsumption</span>,</span>
 <span>  householdDetailsDf <span class="op">=</span> <span class="va">householdDetails</span>,</span>
@@ -106,7 +125,6 @@
 <span>  years <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">2021</span><span class="op">:</span><span class="fl">2024</span><span class="op">)</span>,</span>
 <span>  MNList <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"A"</span><span class="op">)</span></span>
 <span><span class="op">)</span></span></code></pre></div>
-</div>
 </div>
 </div>
   </div>
@@ -138,8 +156,8 @@
 <div class="dev-status">
 <h2 data-toc-skip>Dev status</h2>
 <ul class="list-unstyled">
-<li><a href="https://lifecycle.r-lib.org/articles/stages.html" class="external-link"><img src="https://lifecycle.r-lib.org/articles/figures/lifecycle-stable.svg" alt="Life cycle"></a></li>
 <li><a href="https://github.com/dzvoti/effectivenessCalculations/actions/workflows/R-CMD-check.yaml" class="external-link"><img src="https://github.com/dzvoti/effectivenessCalculations/actions/workflows/R-CMD-check.yaml/badge.svg" alt="R-CMD-check"></a></li>
+<li><a href="https://lifecycle.r-lib.org/articles/stages.html#stable" class="external-link"><img src="https://img.shields.io/badge/lifecycle-stable-brightgreen.svg" alt="Lifecycle: stable"></a></li>
 </ul>
 </div>
 
@@ -154,16 +172,16 @@
 
 <div class="pkgdown">
   <p></p>
-<p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.9.</p>
+<p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.1.0.</p>
 </div>
 
       </footer>
 </div>
 
-  
 
 
-  
+
+
 
   </body>
 </html>

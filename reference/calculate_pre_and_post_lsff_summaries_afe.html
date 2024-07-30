@@ -3,7 +3,7 @@
 <script src="https://oss.maxcdn.com/html5shiv/3.7.3/html5shiv.min.js"></script>
 <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
 <![endif]--></head><body data-spy="scroll" data-target="#toc">
-    
+
 
     <div class="container template-reference-topic">
       <header><div class="navbar navbar-default navbar-fixed-top" role="navigation">
@@ -17,7 +17,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">effectivenessCalculations</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">1.2.0</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">1.3.0</span>
       </span>
     </div>
 
@@ -29,13 +29,13 @@
   </div><!--/.container -->
 </div><!--/.navbar -->
 
-      
+
 
       </header><div class="row">
   <div class="col-md-9 contents">
     <div class="page-header">
     <h1>Calculate Pre and Post LSFF Nutrient Summaries</h1>
-    
+
     <div class="hidden name"><code>calculate_pre_and_post_lsff_summaries_afe.Rd</code></div>
     </div>
 
@@ -60,56 +60,56 @@
 
     <div id="arguments">
     <h2>Arguments</h2>
-    <dl><dt>householdConsumptionDf</dt>
+
+
+<dl><dt id="arg-householdconsumptiondf">householdConsumptionDf<a class="anchor" aria-label="anchor" href="#arg-householdconsumptiondf"></a></dt>
 <dd><p>A dataframe containing household consumption data. Must contain columns: "householdId", "amountConsumedInG".</p></dd>
 
 
-<dt>householdDetailsDf</dt>
+<dt id="arg-householddetailsdf">householdDetailsDf<a class="anchor" aria-label="anchor" href="#arg-householddetailsdf"></a></dt>
 <dd><p>A dataframe containing household details. Must contain columns: "householdId", "memberCount","afeFactor".</p></dd>
 
 
-<dt>nctListDf</dt>
+<dt id="arg-nctlistdf">nctListDf<a class="anchor" aria-label="anchor" href="#arg-nctlistdf"></a></dt>
 <dd><p>A dataframe containing nutrient composition tables. Must contain column: "nutrient".</p></dd>
 
 
-<dt>intakeThresholdsDf</dt>
+<dt id="arg-intakethresholdsdf">intakeThresholdsDf<a class="anchor" aria-label="anchor" href="#arg-intakethresholdsdf"></a></dt>
 <dd><p>A dataframe containing intake thresholds for nutrients. Must contain columns: "nutrient", "ear", "ul".</p></dd>
 
 
-<dt>aggregationGroup</dt>
+<dt id="arg-aggregationgroup">aggregationGroup<a class="anchor" aria-label="anchor" href="#arg-aggregationgroup"></a></dt>
 <dd><p>A character vector of administrative groups to aggregate the data. Must not be empty. Defaults to c("admin0Name", "admin1Name").</p></dd>
 
 
-<dt>fortifiableFoodItemsDf</dt>
+<dt id="arg-fortifiablefooditemsdf">fortifiableFoodItemsDf<a class="anchor" aria-label="anchor" href="#arg-fortifiablefooditemsdf"></a></dt>
 <dd><p>A dataframe containing fortifiable food items. Generated using the function <code><a href="createFortifiableFoodItemsTable.html">createFortifiableFoodItemsTable()</a></code>.</p></dd>
 
 
-<dt>foodVehicleName</dt>
+<dt id="arg-foodvehiclename">foodVehicleName<a class="anchor" aria-label="anchor" href="#arg-foodvehiclename"></a></dt>
 <dd><p>A character string specifying the name of the food vehicle for fortification. Defaults to "wheat flour".</p></dd>
 
 
-<dt>fortificationLevelsDf</dt>
+<dt id="arg-fortificationlevelsdf">fortificationLevelsDf<a class="anchor" aria-label="anchor" href="#arg-fortificationlevelsdf"></a></dt>
 <dd><p>A dataframe containing the average fortification levels for different nutrients and years.</p></dd>
 
 
-<dt>years</dt>
+<dt id="arg-years">years<a class="anchor" aria-label="anchor" href="#arg-years"></a></dt>
 <dd><p>A numeric vector specifying the years for which LSFF is analyzed. Defaults to 2021:2024.</p></dd>
 
 
-<dt>MNList</dt>
+<dt id="arg-mnlist">MNList<a class="anchor" aria-label="anchor" href="#arg-mnlist"></a></dt>
 <dd><p>A character vector of nutrients to be included in the analysis. Defaults to "A". Must not be empty.</p></dd>
 
 </dl></div>
     <div id="value">
     <h2>Value</h2>
-    
-
-<p>A dataframe with the summaries of nutrient inadequacy for the specified administrative groups before and after LSFF.</p>
+    <p>A dataframe with the summaries of nutrient inadequacy for the specified administrative groups before and after LSFF.</p>
     </div>
 
     <div id="ref-examples">
     <h2>Examples</h2>
-    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="kw">if</span> <span class="op">(</span><span class="cn">FALSE</span><span class="op">)</span> <span class="op">{</span></span></span>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="kw">if</span> <span class="op">(</span><span class="cn">FALSE</span><span class="op">)</span> <span class="op">{</span> <span class="co"># \dontrun{</span></span></span>
 <span class="r-in"><span><span class="fu">calculate_pre_and_post_lsff_summaries_afe</span><span class="op">(</span></span></span>
 <span class="r-in"><span>    householdConsumptionDf <span class="op">=</span> <span class="va">householdConsumption</span>,</span></span>
 <span class="r-in"><span>    householdDetailsDf <span class="op">=</span> <span class="va">householdDetails</span>,</span></span>
@@ -122,7 +122,7 @@
 <span class="r-in"><span>    years <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">2021</span><span class="op">:</span><span class="fl">2024</span><span class="op">)</span>,</span></span>
 <span class="r-in"><span>    MNList <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"A"</span>, <span class="st">"Ca"</span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="op">)</span></span></span>
-<span class="r-in"><span><span class="op">}</span></span></span>
+<span class="r-in"><span><span class="op">}</span> <span class="co"># }</span></span></span>
 </code></pre></div>
     </div>
   </div>
@@ -137,15 +137,15 @@
 </div>
 
 <div class="pkgdown">
-  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.9.</p>
+  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.1.0.</p>
 </div>
 
       </footer></div>
 
-  
 
 
-  
+
+
 
   </body></html>
 
