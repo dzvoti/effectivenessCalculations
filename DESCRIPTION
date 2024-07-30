@@ -17,6 +17,7 @@ Imports:
     janitor,
     readr,
     readxl,
+    rlang,
     tibble,
     tidyr
 Suggests: 
