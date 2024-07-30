@@ -8,8 +8,7 @@ yearAverageFortificationLevel(
   fortification_vehicle,
   Year,
   MN,
-  fortificationLevels =
-    readr::read_csv(here::here("data/average_fortification_levels.csv"))
+  fortificationLevels
 )
 }
 \arguments{

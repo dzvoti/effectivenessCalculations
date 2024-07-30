@@ -12,8 +12,9 @@
 #' \dontrun{
 #' avgFortificationLevel <- yearAverageFortificationLevel("wheat flour", 2024, "A")
 #' }
+#' @export
 #' @keywords internal
-yearAverageFortificationLevel <- function(fortification_vehicle, Year, MN, fortificationLevels = readr::read_csv(here::here("data/average_fortification_levels.csv"))) {
+yearAverageFortificationLevel <- function(fortification_vehicle, Year, MN, fortificationLevels) {
     yearAverageFortificationLevel <- fortificationLevels[fortificationLevels$Year == Year, MN][[1]]
 
     return(yearAverageFortificationLevel)
