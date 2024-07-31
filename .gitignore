@@ -53,3 +53,4 @@ data/
 excludeR/
 .Rproj.user
 R/calculateMnFoodVehicleHhReach.R
+docs

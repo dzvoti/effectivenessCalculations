@@ -7,3 +7,6 @@
 ^excludeR$
 ^data$
 ^\.github$
+^_pkgdown\.yml$
+^docs$
+^pkgdown$
