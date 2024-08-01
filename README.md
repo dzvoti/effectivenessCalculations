@@ -5,11 +5,11 @@
 
 <!-- badges: start -->
 
-[![R-CMD-check](https://github.com/dzvoti/effectivenessCalculations/actions/workflows/R-CMD-check.yaml/badge.svg)](https://github.com/dzvoti/effectivenessCalculations/actions/workflows/R-CMD-check.yaml)
+[![R-CMD-check](https://github.com/micronutrientsupport/effectivenessCalculations/actions/workflows/R-CMD-check.yaml/badge.svg)](https://github.com/micronutrientsupport/effectivenessCalculations/actions/workflows/R-CMD-check.yaml)
 [![Lifecycle:
 stable](https://img.shields.io/badge/lifecycle-stable-brightgreen.svg)](https://lifecycle.r-lib.org/articles/stages.html#stable)
 ![GitHub R package
-version](https://img.shields.io/github/r-package/v/dzvoti/effectivenessCalculations)
+version](https://img.shields.io/github/r-package/v/micronutrientsupport/effectivenessCalculations)
 <!-- badges: end -->
 
 The goal of effectivenessCalculations is to provide functions for
@@ -19,11 +19,13 @@ as baseline inadequacy and household reach for food vehicles.
 ## Installation
 
 You can install the development version of effectivenessCalculations
-from [GitHub](https://github.com/dzvoti/effectivenessCalculations) with:
+from
+[GitHub](https://github.com/micronutrientsupport/effectivenessCalculations)
+with:
 
 ``` r
 # install.packages("devtools")
-devtools::install_github("dzvoti/effectivenessCalculations")
+devtools::install_github("micronutrientsupport/effectivenessCalculations")
 ```
 
 ## Basic Examples
